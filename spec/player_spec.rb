@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/connect_four/gameplay'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/player'

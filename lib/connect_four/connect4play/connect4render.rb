@@ -1,50 +1,57 @@
 # frozen_string_literal: true
 
-GAME_ROWS = 6
-GAME_COLS = 7
-BOX_CHARS = {
-  top_left_corner: "\u250c",
-  top_right_corner: "\u2510",
-  bot_left_corner: "\u2514",
-  bot_right_corner: "\u2518",
-  top_vertical_line: "\u252c",
-  bot_vertical_line: "\u2534",
-  left_horz_line: "\u251c",
-  right_horz_line: "\u2524",
-  vert_line: "\u2502",
-  horz_line: "\u2500",
-  cross: "\u253c"
-}.freeze
+module Connect4Game
+  # generate an ascii representation of the gamestate
+  class Connect4Render
+    include Connect4Game::Constants
+    attr_accessor :connect4_board, :rendered_board, :rendered_board_nb,
+                  :borders, :xo_array
 
-module ConnectFour
-  # routines to print current game state
-  module GameDisplay
-    module_function
+    def initialize(board: nil, borders: true)
+      @connect4_board = board
+      @xo_array = []
+      @rendered_board = ''
+      @rendered_board_nb = ''
+      @borders = borders
+    end
 
-    def print_game(arr)
-      arr = transpose(arr)
+    def ascii_state_rep
+      return 'no data' if connect4_board.nil?
+
+      self.xo_array = transpose(connect4_board)
+      self.rendered_board_nb = xo_array.join("\n")
       disp = []
-      top_border = top_border(GAME_COLS)
-      middle_divider = middle_divider(GAME_COLS)
-      bottom_border = bottom_border(GAME_COLS)
+
+      top_border = top_border(ROWS_COUNT)
+      middle_divider = middle_divider(ROWS_COUNT)
+      bottom_border = bottom_border(ROWS_COUNT)
 
       disp << top_border
-
-      arr.map do |row|
+      xo_array.map do |row|
         disp << middle_values(row)
         disp << middle_divider
       end
 
       disp[-1] = bottom_border
-      puts disp.join("\n")
+      self.rendered_board = disp.join("\n")
+
+      return rendered_board_nb unless borders
+
+      rendered_board
+    end
+
+    def icon(token)
+      token.icon
     end
 
     def transpose(arr, fill: ' ')
       # arr rows are game columns,
       # row[0] is at the bottom of the board.
-      max_len = arr.reduce(0) { |a, elem| [a, elem.length].max }
-      (max_len.times.map do |i|
-        arr.map { |row| row[i] || fill }
+      arr1 = arr.map do |row|
+        row.map { |token| token.owner.icon }
+      end
+      (COLS_COUNT.times.map do |i|
+        arr1.map { |row| row[i] || fill }
       end).reverse
     end
 

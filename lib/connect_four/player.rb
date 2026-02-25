@@ -4,17 +4,17 @@
 module Connect4Game
   # player parent class
   class Player
-    attr_accessor :name, :connect4, :next_states, :tokens
+    attr_accessor :name, :connect4, :next_states, :tokens, :icon
 
-    COL_LENGTH = 7
-    ROW_DEPTH = 6
-
-    def initialize(name: 'Player', desc: '', user_input: UserInput.new)
+    def initialize(name: 'Player', icon: '', desc: '',
+                   user_input: UserInput.new)
       @name = name
       @desc = desc
+      @icon = icon
+      @user_input = user_input
+
       @next_states = []
       @tokens = []
-      @user_input = user_input
     end
 
     def valid_selection?(val, next_states)

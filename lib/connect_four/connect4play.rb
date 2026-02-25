@@ -4,18 +4,14 @@
 module Connect4Game
   # store current state of the game.
   class Connect4play < GamePlay
+    include Connect4Game::Constants
     attr_accessor :connect4_board, :token_count
 
-    # ROWS here = COLS in the connect 4 print out.
-    # COLS here = ROWS in the connect 4 print out.
-    ROWS_COUNT = 7
-    COLS_COUNT = 6
-    NEW_TOKENS_PER_TURN = 1
-    TOKEN_MOVES_PER_TURN = 0
-
-    def initialize(name: 'Connect4')
-      super(game_name: name)
+    def initialize(name: 'Connect4', players: [])
+      super(game_name: name, players: players)
       @connect4_board = Array.new(ROWS_COUNT) { [] }
+      @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
+      @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end
 
     def reset_gamestate
@@ -23,12 +19,14 @@ module Connect4Game
       self.connect4_board = Array.new(ROWS_COUNT) { [] }
     end
 
-    def add_new_player_tokens
+    def add_new_player_tokens(player, new_token_count)
       # player gets 1 new stone to place per turn
-      NEW_TOKENS_PER_TURN.times do |_i|
+      new_token_count.times do |_i|
         token_state = Connect4TokenState.new
-        new_token = Token.new(owner: player, cur_state: token_state)
-        new_player_tokens << new_token
+        new_player_tokens << Token.new(token_name: 'stone',
+                                       owner: player,
+                                       desc: game_piece,
+                                       cur_state: token_state)
       end
     end
 
@@ -59,6 +57,7 @@ module Connect4Game
 
     def place_player_tokens(player)
       new_player_tokens.each do |token|
+        print_gamestate
         next_states(token)
         token = player.place_token(token)
         update_board(token)
@@ -70,29 +69,13 @@ module Connect4Game
       connect4_board[token.cur_state.row] << token
       self.token_count += 1
     end
-  end
 
-  # player token locations
-  class Connect4TokenState < TokenState
-    attr_accessor :id
-    attr_reader :row, :col
-
-    def initialize(row: -1, col: -1)
-      super(desc: '')
-      # token location information
-      @row = row
-      @col = col
-      @id = [row, col].inspect
+    def print_gamestate
+      puts render_gamestate_to_ascii
     end
 
-    def row=(value)
-      @row = value
-      @id = [value, @col].inspect
-    end
-
-    def col=(value)
-      @col = value
-      @id = [@row, value].inspect
+    def render_gamestate_to_ascii
+      Connect4Render.new(board: connect4_board, borders: true).ascii_state_rep
     end
   end
 end

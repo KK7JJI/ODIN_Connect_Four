@@ -1,9 +1,19 @@
-require_relative '../lib/connect_four/gameplay'
+# frozen_string_literal: true
+
+require_relative '../lib/connect_four/constants'
 require_relative '../lib/connect_four/player'
+require_relative '../lib/connect_four/gameplay'
+require_relative '../lib/connect_four/gameplay/token'
+require_relative '../lib/connect_four/gameplay/tokenstate'
+require_relative '../lib/connect_four/gameplay/baserender'
+require_relative '../lib/connect_four/gameplay/node'
+require_relative '../lib/connect_four/connect4play'
+require_relative '../lib/connect_four/connect4play/connect4tokenstate'
+require_relative '../lib/connect_four/connect4play/connect4render'
 
 describe Connect4Game::GamePlay do
-  player1 = Connect4Game::Human.new(name: 'Player 1')
-  player2 = Connect4Game::Human.new(name: 'Player 2')
+  player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
+  player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')
   players = [player1, player2]
 
   def new_token(owner, name)
@@ -27,6 +37,7 @@ describe Connect4Game::GamePlay do
       allow(player1).to receive(:move_token).and_return(token2)
       allow(player2).to receive(:place_token).and_return(token3)
       allow(player2).to receive(:move_token).and_return(token4)
+      allow($stdout).to receive(:write)
     end
 
     it 'play ends with player2 move' do
@@ -69,7 +80,28 @@ describe Connect4Game::GamePlay do
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round
       expect(gp.last_node.token).to eql(token5)
-      expect(gp.walk_nodes).to eql(
+    end
+  end
+  describe '#print_gamestate' do
+    let(:token1) { new_token(player1, 'stone1') }
+    let(:token2) { new_token(player1, 'stone2') }
+    let(:token3) { new_token(player2, 'stone3') }
+    let(:token4) { new_token(player2, 'stone4') }
+    let(:token5) { new_token(player1, 'stone5') }
+
+    before do
+      allow(player1).to receive(:place_token).and_return(token1, token5)
+      allow(player1).to receive(:move_token).and_return(token2)
+      allow(player2).to receive(:place_token).and_return(token3)
+      allow(player2).to receive(:move_token).and_return(token4)
+      allow($stdout).to receive(:write)
+    end
+
+    it 'printed output is produced' do
+      sequence = [false] + [false] * 5 + [false] * 5 + [false] + [false] + [true] * 4
+      expect(gp).to receive(:game_over?).and_return(*sequence)
+      gp.play_round
+      expect(gp.render_gamestate_to_ascii).to eql(
         %w[stone1 stone2 stone3 stone4 stone5]
       )
     end

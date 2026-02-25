@@ -6,8 +6,8 @@ module Connect4Game
   module Constants
     # ROWS here = COLS in the connect 4 print out.
     # COLS here = ROWS in the connect 4 print out.
-    ROWS_COUNT = 7
-    COLS_COUNT = 6
+    GAME_COLUMNS = 7
+    GAME_ROWS = 6
     BASE_NEW_TOKENS_PER_TURN = 1
     BASE_TOKEN_MOVES_PER_TURN = 1
     C4_NEW_TOKENS_PER_TURN = 1

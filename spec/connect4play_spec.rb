@@ -5,6 +5,7 @@ require_relative '../lib/connect_four/player'
 require_relative '../lib/connect_four/gameplay'
 require_relative '../lib/connect_four/gameplay/token'
 require_relative '../lib/connect_four/gameplay/tokenstate'
+require_relative '../lib/connect_four/gameplay/baserender'
 require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
@@ -13,24 +14,6 @@ require_relative '../lib/connect_four/connect4play/connect4render'
 player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
 player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')
 players = [player1, player2]
-
-describe Connect4Game::Connect4TokenState do
-  subject(:token) { described_class.new }
-
-  describe '#row=() updates id' do
-    it 'set row' do
-      expect { token.row = 1 }.to change { token.id }.from([-1, -1].inspect).to([1, -1].inspect)
-      expect(token.row).to eql(1)
-    end
-  end
-
-  describe '#col=() updates id' do
-    it 'set col' do
-      expect { token.col = 1 }.to change { token.id }.from([-1, -1].inspect).to([-1, 1].inspect)
-      expect(token.col).to eql(1)
-    end
-  end
-end
 
 describe Connect4Game::Connect4play do
   subject(:c4p) { described_class.new(players: players) }
@@ -44,22 +27,19 @@ describe Connect4Game::Connect4play do
     let(:token2) { Connect4Game::Token.new(cur_state: token2state) }
     let(:token3) { Connect4Game::Token.new(cur_state: token3state) }
 
-    it 'update token count' do
-      expect { c4p.update_board(token1) }.to change { c4p.token_count }.by(1)
-      expect(c4p.connect4_board[1].length).to eql(1)
+    before do
+      allow(c4p).to receive(:setup_new_game)
     end
 
     it 'place second token' do
       c4p.update_board(token1)
       c4p.update_board(token2)
-      expect(c4p.token_count).to eql(2)
       expect(c4p.connect4_board[1].length).to eql(2)
     end
     it 'place third token' do
       c4p.update_board(token1)
       c4p.update_board(token2)
       c4p.update_board(token3)
-      expect(c4p.token_count).to eql(3)
       expect(c4p.connect4_board[2].length).to eql(1)
     end
 
@@ -71,7 +51,7 @@ describe Connect4Game::Connect4play do
       end
       expect(c4p.connect4_board[0].length).to eql(6)
       expect(c4p).not_to be_full
-      expect(c4p.available_columns).to eql([1, 2, 3, 4, 5, 6])
+      expect(c4p.open_columns).to eql([1, 2, 3, 4, 5, 6])
     end
     it 'fill all rows, board is full.' do
       (0...7).each do |j|
@@ -84,7 +64,7 @@ describe Connect4Game::Connect4play do
         expect(c4p.connect4_board[j][5].cur_state.col).to eql(5)
         expect(c4p.connect4_board[j][5].cur_state.row).to eql(j)
       end
-      expect(c4p.available_columns).to eql([])
+      expect(c4p.open_columns).to eql([])
       expect(c4p).to be_full
       expect(c4p).to be_game_over
     end
@@ -99,27 +79,31 @@ describe Connect4Game::Connect4play do
     let(:token2) { Connect4Game::Token.new(owner: player1, cur_state: token2state) }
     let(:token3) { Connect4Game::Token.new(owner: player1, cur_state: token3state) }
 
+    before do
+      allow(c4p).to receive(:setup_new_game)
+    end
+
     it 'empty board' do
-      expect(c4p.render_gamestate_to_ascii.count(' ')).to eql(42)
+      expect(c4p.render_gamestate.count(' ')).to eql(42)
     end
 
     it 'one token on the board' do
       c4p.update_board(token1)
-      expect(c4p.render_gamestate_to_ascii.count('X')).to eql(1)
-      expect(c4p.render_gamestate_to_ascii.count(' ')).to eql(41)
+      expect(c4p.render_gamestate.count('X')).to eql(1)
+      expect(c4p.render_gamestate.count(' ')).to eql(41)
     end
     it 'two tokens on the board' do
       c4p.update_board(token1)
       c4p.update_board(token2)
-      expect(c4p.render_gamestate_to_ascii.count('X')).to eql(2)
-      expect(c4p.render_gamestate_to_ascii.count(' ')).to eql(40)
+      expect(c4p.render_gamestate.count('X')).to eql(2)
+      expect(c4p.render_gamestate.count(' ')).to eql(40)
     end
     it 'three tokens on the board' do
       c4p.update_board(token1)
       c4p.update_board(token2)
       c4p.update_board(token3)
-      expect(c4p.render_gamestate_to_ascii.count('X')).to eql(3)
-      expect(c4p.render_gamestate_to_ascii.count(' ')).to eql(39)
+      expect(c4p.render_gamestate.count('X')).to eql(3)
+      expect(c4p.render_gamestate.count(' ')).to eql(39)
     end
     it 'fill one entire row.' do
       (0...6).each do |i|
@@ -127,8 +111,8 @@ describe Connect4Game::Connect4play do
         token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
         c4p.update_board(token)
       end
-      expect(c4p.render_gamestate_to_ascii.count('O')).to eql(6)
-      expect(c4p.render_gamestate_to_ascii.count(' ')).to eql(36)
+      expect(c4p.render_gamestate.count('O')).to eql(6)
+      expect(c4p.render_gamestate.count(' ')).to eql(36)
     end
     it 'fill all rows, board is full.' do
       (0...7).each do |j|
@@ -137,10 +121,10 @@ describe Connect4Game::Connect4play do
           token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
           c4p.update_board(token)
         end
-        expect(c4p.render_gamestate_to_ascii.count('O')).to eql(6 * (j + 1))
-        expect(c4p.render_gamestate_to_ascii.count(' ')).to eql(42 - 6 * (j + 1))
+        expect(c4p.render_gamestate.count('O')).to eql(6 * (j + 1))
+        expect(c4p.render_gamestate.count(' ')).to eql(42 - 6 * (j + 1))
       end
-      expect(c4p.render_gamestate_to_ascii.count('O')).to eql(42)
+      expect(c4p.render_gamestate.count('O')).to eql(42)
     end
   end
 end

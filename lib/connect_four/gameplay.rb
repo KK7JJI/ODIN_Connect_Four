@@ -4,35 +4,47 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class GamePlay
     include Connect4Game::Constants
-    attr_accessor :players, :game_nodes, :new_player_tokens,
-                  :last_node, :token_count
+    attr_accessor :players, :last_node
 
-    def initialize(game_name: 'generic game', players: [])
+    def initialize(game_name: 'generic game', players: nil)
       @game_name = game_name
-      @players = players
-      @token_count = 0
-      @new_player_tokens = []
+      @players = players || []
       @last_node = nil
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
     end
 
-    def play_round
-      reset_gamestate
+    def play_round(on_state_change: nil)
+      setup_new_game
       until game_over?
-        print_gamestate
+        on_state_change&.call(render_gamestate)
         players.each do |player|
-          add_new_player_tokens(player, @new_tokens_per_turn)
-          place_new_tokens(player) unless game_over?
-          move_player_tokens(player, @token_moves_per_turn) unless game_over?
+          player_turn(player)
           break if game_over?
         end
       end
-      print_gamestate
+      on_state_change&.call(render_gamestate)
+    end
+
+    def player_turn(player)
+      place_new_tokens(player) if !game_over? && supports_new_tokens?
+      move_player_tokens(player) if !game_over? && supports_token_movement?
+    end
+
+    def supports_new_tokens?
+      @new_tokens_per_turn.positive?
+    end
+
+    def supports_token_movement?
+      @token_moves_per_turn.positive?
+    end
+
+    def setup_new_game
+      self.players = PlayerSetup.new.run_player_setup
+      reset_gamestate
     end
 
     def reset_gamestate
-      self.token_count = 0
       self.new_player_tokens = []
       self.last_node = nil
       players.each do |player|
@@ -41,47 +53,26 @@ module Connect4Game
       end
     end
 
-    def add_new_player_tokens(player, new_token_count)
-      new_token_count.times do |_i|
-        new_player_tokens << Token.new(token_name: 'stone',
-                                       owner: player,
-                                       desc: 'game piece')
+    def add_new_player_tokens(player)
+      Array.new(@new_tokens_per_turn) do
+        Token.new(token_name: 'stone', owner: player, desc: 'game piece')
       end
-    end
-
-    def game_over?
-      # expecting game specific override
-      true
-    end
-
-    def player_token_next_states(player)
-      player.tokens.each do |token|
-        token.next_states = next_states(token)
-      end
-    end
-
-    def next_states(token)
-      # expecting game specific override
-      token.next_states = []
-      token
     end
 
     def place_new_tokens(player)
-      # expecting game specific override
+      new_player_tokens = add_new_player_tokens(player)
+
       while new_player_tokens.length.positive?
-        print_gamestate
         token = new_player_tokens.shift
-        next_states(token)
+        compute_next_states(token)
         token = player.place_token(token)
         add_node(Node.new(parent: nil, token: token))
         break if game_over?
       end
     end
 
-    def move_player_tokens(player, moves_per_turn)
-      # expecting game specific override
-      moves_per_turn.times do |_i|
-        print_gamestate
+    def move_player_tokens(player)
+      @token_moves_per_turn.times do
         player_token_next_states(player)
         token = player.move_token
         add_node(Node.new(parent: nil, token: token))
@@ -89,24 +80,29 @@ module Connect4Game
       end
     end
 
-    def print_gamestate
-      # system('clear')
-      puts '==================='
-      puts render_gamestate_to_ascii
-      puts '==================='
+    def game_over?
+      raise NotImplementedError, 'game_over? must be implimented in a subclass.'
     end
 
-    def render_gamestate_to_ascii
+    def player_token_next_states(player)
+      player.tokens.each do |token|
+        token.next_states = compute_next_states(token)
+      end
+    end
+
+    def compute_next_states(token)
+      # expecting game specific override
+      token.next_states = []
+      token
+    end
+
+    def render_gamestate
       BaseRender.new(node: last_node).ascii_state_rep
     end
 
     def add_node(node)
-      if last_node.is_a?(Node)
-        temp = last_node
-        self.last_node = node
-        last_node.parent = temp
-      end
-      self.last_node = node unless last_node.is_a?(Node)
+      node.parent = last_node
+      self.last_node = node
     end
   end
 end

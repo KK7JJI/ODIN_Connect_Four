@@ -22,9 +22,9 @@ module Connect4Game
       self.rendered_board_nb = xo_array.join("\n")
       disp = []
 
-      top_border = top_border(ROWS_COUNT)
-      middle_divider = middle_divider(ROWS_COUNT)
-      bottom_border = bottom_border(ROWS_COUNT)
+      top_border = top_border(GAME_COLUMNS)
+      middle_divider = middle_divider(GAME_COLUMNS)
+      bottom_border = bottom_border(GAME_COLUMNS)
 
       disp << top_border
       xo_array.map do |row|
@@ -50,7 +50,7 @@ module Connect4Game
       arr1 = arr.map do |row|
         row.map { |token| token.owner.icon }
       end
-      (COLS_COUNT.times.map do |i|
+      (GAME_ROWS.times.map do |i|
         arr1.map { |row| row[i] || fill }
       end).reverse
     end

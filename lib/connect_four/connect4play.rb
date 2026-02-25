@@ -48,8 +48,8 @@ module Connect4Game
     def open_positions
       open_columns.map do |i|
         Connect4TokenState.new(
-          row: i,
-          col: connect4_board[i].length
+          col: i,
+          row: connect4_board[i].length
         )
       end
     end
@@ -62,7 +62,7 @@ module Connect4Game
     end
 
     def update_board(token)
-      connect4_board[token.cur_state.row] << token
+      connect4_board[token.cur_state.col] << token
     end
 
     def render_gamestate

@@ -19,9 +19,9 @@ describe Connect4Game::Connect4play do
   subject(:c4p) { described_class.new(players: players) }
 
   context '#update_board' do
-    let(:token1state) { Connect4Game::Connect4TokenState.new(row: 1, col: 0) }
+    let(:token1state) { Connect4Game::Connect4TokenState.new(row: 0, col: 1) }
     let(:token2state) { Connect4Game::Connect4TokenState.new(row: 1, col: 1) }
-    let(:token3state) { Connect4Game::Connect4TokenState.new(row: 2, col: 0) }
+    let(:token3state) { Connect4Game::Connect4TokenState.new(row: 0, col: 2) }
 
     let(:token1) { Connect4Game::Token.new(cur_state: token1state) }
     let(:token2) { Connect4Game::Token.new(cur_state: token2state) }
@@ -45,7 +45,7 @@ describe Connect4Game::Connect4play do
 
     it 'fill one entire row.' do
       (0...6).each do |i|
-        token_state = Connect4Game::Connect4TokenState.new(row: 0, col: i)
+        token_state = Connect4Game::Connect4TokenState.new(row: i, col: 0)
         token = Connect4Game::Token.new(cur_state: token_state)
         c4p.update_board(token)
       end
@@ -56,13 +56,13 @@ describe Connect4Game::Connect4play do
     it 'fill all rows, board is full.' do
       (0...7).each do |j|
         (0...6).each do |i|
-          token_state = Connect4Game::Connect4TokenState.new(row: j, col: i)
+          token_state = Connect4Game::Connect4TokenState.new(row: i, col: j)
           token = Connect4Game::Token.new(cur_state: token_state)
           c4p.update_board(token)
         end
         expect(c4p.connect4_board[j].length).to eql(6)
-        expect(c4p.connect4_board[j][5].cur_state.col).to eql(5)
-        expect(c4p.connect4_board[j][5].cur_state.row).to eql(j)
+        expect(c4p.connect4_board[j][5].cur_state.row).to eql(5)
+        expect(c4p.connect4_board[j][5].cur_state.col).to eql(j)
       end
       expect(c4p.open_columns).to eql([])
       expect(c4p).to be_full
@@ -71,9 +71,9 @@ describe Connect4Game::Connect4play do
   end
 
   context 'display board' do
-    let(:token1state) { Connect4Game::Connect4TokenState.new(row: 1, col: 0) }
+    let(:token1state) { Connect4Game::Connect4TokenState.new(row: 0, col: 1) }
     let(:token2state) { Connect4Game::Connect4TokenState.new(row: 1, col: 1) }
-    let(:token3state) { Connect4Game::Connect4TokenState.new(row: 2, col: 0) }
+    let(:token3state) { Connect4Game::Connect4TokenState.new(row: 0, col: 2) }
 
     let(:token1) { Connect4Game::Token.new(owner: player1, cur_state: token1state) }
     let(:token2) { Connect4Game::Token.new(owner: player1, cur_state: token2state) }
@@ -107,7 +107,7 @@ describe Connect4Game::Connect4play do
     end
     it 'fill one entire row.' do
       (0...6).each do |i|
-        token_state = Connect4Game::Connect4TokenState.new(row: 0, col: i)
+        token_state = Connect4Game::Connect4TokenState.new(row: i, col: 0)
         token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
         c4p.update_board(token)
       end
@@ -117,7 +117,7 @@ describe Connect4Game::Connect4play do
     it 'fill all rows, board is full.' do
       (0...7).each do |j|
         (0...6).each do |i|
-          token_state = Connect4Game::Connect4TokenState.new(row: j, col: i)
+          token_state = Connect4Game::Connect4TokenState.new(row: i, col: j)
           token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
           c4p.update_board(token)
         end

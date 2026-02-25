@@ -6,29 +6,35 @@ module Connect4Game
     include Connect4Game::Constants
     attr_accessor :players, :last_node
 
-    def initialize(game_name: 'generic game', players: nil)
+    def initialize(game_name: 'generic game',
+                   players: nil,
+                   renderer: SimpleAsciiRenderer.new)
       @game_name = game_name
       @players = players || []
       @last_node = nil
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
+      @renderer = renderer
     end
 
     def play_round(on_state_change: nil)
       setup_new_game
+      on_state_change&.call(render_gamestate)
       until game_over?
-        on_state_change&.call(render_gamestate)
         players.each do |player|
-          player_turn(player)
+          player_turn(player: player)
           break if game_over?
+
+          on_state_change&.call(render_gamestate)
         end
       end
       on_state_change&.call(render_gamestate)
     end
 
-    def player_turn(player)
-      place_new_tokens(player) if !game_over? && supports_new_tokens?
-      move_player_tokens(player) if !game_over? && supports_token_movement?
+    def player_turn(player:)
+      puts player.name
+      place_new_tokens(player: player) if !game_over? && supports_new_tokens?
+      move_player_tokens(player: player) if !game_over? && supports_token_movement?
     end
 
     def supports_new_tokens?
@@ -41,37 +47,30 @@ module Connect4Game
 
     def setup_new_game
       self.players = PlayerSetup.new.run_player_setup
-      reset_gamestate
     end
 
-    def reset_gamestate
-      self.new_player_tokens = []
-      self.last_node = nil
-      players.each do |player|
-        player.next_states = []
-        player.tokens = []
+    def place_new_tokens(player:)
+      new_player_tokens = add_new_player_tokens(player: player)
+      while new_player_tokens.length.positive?
+        token = new_player_tokens.shift
+        place_token(player: player, token: token)
+        break if game_over?
       end
     end
 
-    def add_new_player_tokens(player)
+    def add_new_player_tokens(player:)
       Array.new(@new_tokens_per_turn) do
         Token.new(token_name: 'stone', owner: player, desc: 'game piece')
       end
     end
 
-    def place_new_tokens(player)
-      new_player_tokens = add_new_player_tokens(player)
-
-      while new_player_tokens.length.positive?
-        token = new_player_tokens.shift
-        compute_next_states(token)
-        token = player.place_token(token)
-        add_node(Node.new(parent: nil, token: token))
-        break if game_over?
-      end
+    def place_token(player:, token:)
+      compute_next_states(token)
+      token = player.place_token(token)
+      add_node(Node.new(parent: nil, token: token))
     end
 
-    def move_player_tokens(player)
+    def move_player_tokens(player:)
       @token_moves_per_turn.times do
         player_token_next_states(player)
         token = player.move_token
@@ -97,7 +96,7 @@ module Connect4Game
     end
 
     def render_gamestate
-      BaseRender.new(node: last_node).ascii_state_rep
+      @renderer.render(last_node)
     end
 
     def add_node(node)

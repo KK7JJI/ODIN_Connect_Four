@@ -2,14 +2,14 @@
 
 module Connect4Game
   # code needed to produce ascii display
-  class BaseRender
+  class SimplerAsciiRenderer
     attr_reader :last_node
 
-    def initialize(node: nil)
-      @last_node = node
+    def render(last_node)
+      ascii_state_rep(last_node)
     end
 
-    def ascii_state_rep
+    def ascii_state_rep(last_node)
       return 'no data' if last_node.nil?
 
       tokens = []

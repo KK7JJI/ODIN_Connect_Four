@@ -4,12 +4,13 @@ require_relative 'connect_four/app'
 require_relative 'connect_four/constants'
 require_relative 'connect_four/player'
 require_relative 'connect_four/gameplay'
+require_relative 'connect_four/gameplay/playersetup'
 require_relative 'connect_four/gameplay/token'
 require_relative 'connect_four/gameplay/tokenstate'
-require_relative 'connect_four/gameplay/baserender'
+require_relative 'connect_four/gameplay/simpleasciirenderer'
 require_relative 'connect_four/gameplay/node'
 require_relative 'connect_four/connect4play'
-require_relative 'connect_four/connect4play/connect4render'
+require_relative 'connect_four/connect4play/c4asciirenderer'
 require_relative 'connect_four/connect4play/connect4tokenstate'
 
 # Entry point.  run.sh starts execution
@@ -23,4 +24,4 @@ module Connect4Game
 end
 
 # Start the program if this file is executed directly
-# Connect4Game.run(ARGV)
+Connect4Game.run(ARGV)

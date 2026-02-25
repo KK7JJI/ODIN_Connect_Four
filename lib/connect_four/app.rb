@@ -5,8 +5,8 @@ module Connect4Game
   # entry point for the Bash script executable.
   class App
     def run(args)
-      # puts "::App.run Running with arguments: #{args.inspect}"
-      game = connect4play.new
+      game = Connect4Game::Connect4play.new
+      game.play_round(on_state_change: ->(state) { puts state })
     end
   end
 end

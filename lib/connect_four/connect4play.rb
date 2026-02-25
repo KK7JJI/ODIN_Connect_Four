@@ -7,19 +7,20 @@ module Connect4Game
     include Connect4Game::Constants
     attr_accessor :connect4_board
 
-    def initialize(name: 'Connect4', players: nil)
-      super(game_name: name, players: players)
+    def initialize(name: 'Connect4',
+                   players: nil,
+                   renderer: C4Ascii4Renderer.new)
+      super(game_name: name, players: players, renderer: renderer)
       @connect4_board = Array.new(GAME_COLUMNS) { [] }
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end
 
-    def reset_gamestate
-      super
-      self.connect4_board = Array.new(GAME_COLUMNS) { [] }
+    def configure_renderer
+      @renderer.connect4_board = connect4_board
     end
 
-    def add_new_player_tokens(player)
+    def add_new_player_tokens(player:)
       Array.new(@new_tokens_per_turn) do
         Token.new(
           token_name: 'stone',
@@ -28,6 +29,13 @@ module Connect4Game
           cur_state: Connect4TokenState.new
         )
       end
+    end
+
+    def place_token(player:, token:)
+      compute_next_states(token)
+      token = player.place_token(token)
+      add_node(Node.new(parent: nil, token: token))
+      update_board(token)
     end
 
     def game_over?
@@ -66,7 +74,7 @@ module Connect4Game
     end
 
     def render_gamestate
-      Connect4Render.new(board: connect4_board, borders: true).ascii_state_rep
+      @renderer.render(connect4_board)
     end
   end
 end

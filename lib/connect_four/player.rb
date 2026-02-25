@@ -4,20 +4,20 @@
 module Connect4Game
   # player parent class
   class Player
-    attr_accessor :name, :connect4, :next_states, :tokens, :icon
+    attr_accessor :name, :connect4, :next_states, :tokens, :icon, :input
 
     def initialize(name: 'Player', icon: '', desc: '',
-                   user_input: UserInput.new)
+                   input: UserInput.new)
       @name = name
       @desc = desc
       @icon = icon
-      @user_input = user_input
+      @input = input
 
       @next_states = []
       @tokens = []
     end
 
-    def valid_selection?(val, next_states)
+    def valid_selection?(val)
       val_int = val.to_i
       return false if val_int.to_s != val
       return false if val_int.negative?
@@ -34,8 +34,9 @@ module Connect4Game
   class Human < Player
     def place_token(token)
       # player accepts an object with obj.next_states
-      self.next_states = token.next_states.map(&:row)
-      token.cur_state = token.next_states[next_states.index(user_input)]
+      self.next_states = token.next_states.map(&:col)
+      selection = next_states.index(user_input)
+      token.cur_state = token.next_states[selection]
       tokens << token
       token
     end

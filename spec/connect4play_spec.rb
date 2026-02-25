@@ -5,11 +5,11 @@ require_relative '../lib/connect_four/player'
 require_relative '../lib/connect_four/gameplay'
 require_relative '../lib/connect_four/gameplay/token'
 require_relative '../lib/connect_four/gameplay/tokenstate'
-require_relative '../lib/connect_four/gameplay/baserender'
+require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
 require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
-require_relative '../lib/connect_four/connect4play/connect4render'
+require_relative '../lib/connect_four/connect4play/c4asciirenderer'
 
 player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
 player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')

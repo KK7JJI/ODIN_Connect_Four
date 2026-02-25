@@ -2,20 +2,23 @@
 
 module Connect4Game
   # generate an ascii representation of the gamestate
-  class Connect4Render
+  class C4Ascii4Renderer
     include Connect4Game::Constants
     attr_accessor :connect4_board, :rendered_board, :rendered_board_nb,
                   :borders, :xo_array
 
     def initialize(board: nil, borders: true)
-      @connect4_board = board
       @xo_array = []
       @rendered_board = ''
       @rendered_board_nb = ''
       @borders = borders
     end
 
-    def ascii_state_rep
+    def render(connect4_board)
+      ascii_state_rep(connect4_board)
+    end
+
+    def ascii_state_rep(connect4_board)
       return 'no data' if connect4_board.nil?
 
       self.xo_array = transpose(connect4_board)
@@ -47,6 +50,7 @@ module Connect4Game
     def transpose(arr, fill: ' ')
       # arr rows are game columns,
       # row[0] is at the bottom of the board.
+      puts arr.inspect
       arr1 = arr.map do |row|
         row.map { |token| token.owner.icon }
       end

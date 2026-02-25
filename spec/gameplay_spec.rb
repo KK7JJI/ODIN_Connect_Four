@@ -5,11 +5,11 @@ require_relative '../lib/connect_four/player'
 require_relative '../lib/connect_four/gameplay'
 require_relative '../lib/connect_four/gameplay/token'
 require_relative '../lib/connect_four/gameplay/tokenstate'
-require_relative '../lib/connect_four/gameplay/baserender'
+require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
 require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
-require_relative '../lib/connect_four/connect4play/connect4render'
+require_relative '../lib/connect_four/connect4play/c4asciirenderer'
 
 describe Connect4Game::GamePlay do
   player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
@@ -24,7 +24,14 @@ describe Connect4Game::GamePlay do
     )
   end
 
-  subject(:gp) { Connect4Game::GamePlay.new(players: players) }
+  let(:renderer) { Connect4Game::SimplerAsciiRenderer.new }
+  subject(:gp) do
+    Connect4Game::GamePlay.new(
+      players: players,
+      renderer: renderer
+    )
+  end
+
   describe '#play round' do
     let(:token1) { new_token(player1, 'stone1') }
     let(:token2) { new_token(player1, 'stone2') }

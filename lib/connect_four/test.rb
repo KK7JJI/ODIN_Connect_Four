@@ -1,24 +1,95 @@
-require_relative './display'
+def diag_coordinates(pos, dir)
+  return [pos] if pos[0] == 0 && dir[0] < 0
+  return [pos] if pos[1] == 0 && dir[1] < 0
+  return [pos] if pos[0] == 5 && dir[0] > 0
+  return [pos] if pos[1] == 6 && dir[1] > 0
 
-arr = Array.new(7) { Array.new(6) { |i| i } }
-puts ConnectFour::GameDisplay.print_game(arr)
+  arr = func(pos.zip(dir).map { |a, b| a + b }, dir)
+  arr << pos
+end
 
-arr = Array.new(7) { Array.new(6) { rand(1...10) } }
-puts ConnectFour::GameDisplay.print_game(arr)
+def array_diagonals
+  arr = []
+  (0...7).each do |i|
+    arr << func([0, i], [1, 1])
+    arr << func([5, i], [-1, -1])
+    arr << func([0, i], [1, -1])
+    arr << func([5, i], [-1, 1])
+  end
 
-arr = Array.new(7) { Array.new(6) { 'O' } }
-puts ConnectFour::GameDisplay.print_game(arr)
+  (0...6).each do |i|
+    arr << func([i, 0], [1, 1])
+    arr << func([i, 6], [-1, -1])
+    arr << func([i, 6], [1, -1])
+    arr << func([i, 0], [-1, 1])
+  end
 
-arr = Array.new(7) { Array.new(6) { 'X' } }
-puts ConnectFour::GameDisplay.print_game(arr)
+  arr = arr.select { |row| row.length > 3 }
+  puts arr.inspect
+  arr.each { |item| puts item.inspect }
+end
 
-arr = []
-arr << []
-arr << (0...1).to_a
-arr << (0...2).to_a
-arr << (0...3).to_a
-arr << (0...4).to_a
-arr << (0...5).to_a
-arr << (0...6).to_a
+array_diagonals
 
-puts ConnectFour::GameDisplay.print_game(arr)
+puts '(0,i)'
+puts ''
+(0...7).each do |i|
+  p func([0, i], [1, 1])
+end
+
+puts ''
+puts '(i,0)'
+puts ''
+(0...6).each do |i|
+  p func([i, 0], [1, 1])
+end
+
+puts ''
+puts '(5,i)'
+puts ''
+(0...7).each do |i|
+  p func([5, i], [-1, -1])
+end
+
+puts ''
+puts '(i,6)'
+puts ''
+(0...6).each do |i|
+  p func([i, 6], [-1, -1])
+end
+
+puts ''
+puts '(0,i)'
+puts ''
+(0...7).each do |i|
+  p func([0, i], [1, -1])
+end
+
+puts ''
+puts '(i,6)'
+puts ''
+(0...6).each do |i|
+  p func([i, 6], [1, -1])
+end
+
+puts ''
+puts '(5,i)'
+puts ''
+(0...7).each do |i|
+  p func([5, i], [-1, 1])
+end
+
+puts ''
+puts '(i,0)'
+puts ''
+(0...6).each do |i|
+  p func([i, 0], [-1, 1])
+end
+
+# p func([0, 0], [1, 1])
+# p func([5, 5], [-1, -1])
+# p func([6, 7], [1, 1])
+# p func([6, 7], [-1, -1])
+
+1 [4, 5, 1, 3, 2, 3, 3, 5, 4, 2, 2, 1, 3, 5, 1, 7, 6, 6, 6, 7, 7]
+2 [4, 3, 2, 4, 5, 1, 4, 3, 4, 6, 2, 1, 2, 5, 5, 1, 6, 6, 7, 7, 7]

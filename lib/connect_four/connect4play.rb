@@ -5,7 +5,7 @@ module Connect4Game
   # store current state of the game.
   class Connect4play < GamePlay
     include Connect4Game::Constants
-    attr_accessor :connect4_board
+    attr_accessor :connect4_board, :renderer
 
     def initialize(name: 'Connect4',
                    players: nil,
@@ -39,7 +39,7 @@ module Connect4Game
     end
 
     def game_over?
-      # to do: need to locate 4 in a row
+      # GameOver.new(renderer.render(response: -> { xo_array }))
       return true if full?
 
       false
@@ -74,7 +74,7 @@ module Connect4Game
     end
 
     def render_gamestate
-      @renderer.render(connect4_board)
+      renderer.render(board: connect4_board)
     end
   end
 end

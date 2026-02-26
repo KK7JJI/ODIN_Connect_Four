@@ -7,40 +7,24 @@ module Connect4Game
     attr_accessor :connect4_board, :rendered_board, :rendered_board_nb,
                   :borders, :xo_array
 
-    def initialize(board: nil, borders: true)
+    def initialize
       @xo_array = []
       @rendered_board = ''
       @rendered_board_nb = ''
-      @borders = borders
     end
 
-    def render(connect4_board)
-      ascii_state_rep(connect4_board)
+    def render(board:, response: -> { rendered_board })
+      ascii_state_rep(board: board, response: response)
     end
 
-    def ascii_state_rep(connect4_board)
-      return 'no data' if connect4_board.nil?
+    def ascii_state_rep(board:, response:)
+      return 'no data' if board.nil?
 
-      self.xo_array = transpose(connect4_board)
-      self.rendered_board_nb = xo_array.join("\n")
-      disp = []
+      self.xo_array = transpose(board)
+      self.rendered_board = board_with_borders
+      self.rendered_board_nb = board_without_borders
 
-      top_border = top_border(GAME_COLUMNS)
-      middle_divider = middle_divider(GAME_COLUMNS)
-      bottom_border = bottom_border(GAME_COLUMNS)
-
-      disp << top_border
-      xo_array.map do |row|
-        disp << middle_values(row)
-        disp << middle_divider
-      end
-
-      disp[-1] = bottom_border
-      self.rendered_board = disp.join("\n")
-
-      return rendered_board_nb unless borders
-
-      rendered_board
+      response&.call
     end
 
     def icon(token)
@@ -50,7 +34,6 @@ module Connect4Game
     def transpose(arr, fill: ' ')
       # arr rows are game columns,
       # row[0] is at the bottom of the board.
-      puts arr.inspect
       arr1 = arr.map do |row|
         row.map { |token| token.owner.icon }
       end
@@ -59,10 +42,35 @@ module Connect4Game
       end).reverse
     end
 
-    def top_border(n)
+    def board_with_borders
+      disp = []
+
+      top_border = top_border(GAME_COLUMNS)
+      middle_divider = middle_divider(GAME_COLUMNS)
+      bottom_border = bottom_border(GAME_COLUMNS)
+
+      disp << top_border
+      xo_array.each do |row|
+        disp << middle_values(row)
+        disp << middle_divider
+      end
+
+      disp[-1] = bottom_border
+      disp.join("\n")
+    end
+
+    def board_without_borders
+      disp = []
+      xo_array.each do |row|
+        disp << row.join('')
+      end
+      disp.join("\n")
+    end
+
+    def top_border(cols)
       result = String.new(BOX_CHARS[:top_left_corner])
       result << BOX_CHARS[:horz_line]
-      result << (BOX_CHARS[:top_vertical_line] + BOX_CHARS[:horz_line]) * (n - 1)
+      result << (BOX_CHARS[:top_vertical_line] + BOX_CHARS[:horz_line]) * (cols - 1)
       result << BOX_CHARS[:top_right_corner]
       result
     end
@@ -74,18 +82,18 @@ module Connect4Game
       result
     end
 
-    def middle_divider(n)
+    def middle_divider(cols)
       result = String.new(BOX_CHARS[:left_horz_line])
       result << BOX_CHARS[:horz_line]
-      result << (BOX_CHARS[:cross] + BOX_CHARS[:horz_line]) * (n - 1)
+      result << (BOX_CHARS[:cross] + BOX_CHARS[:horz_line]) * (cols - 1)
       result << BOX_CHARS[:right_horz_line]
       result
     end
 
-    def bottom_border(n)
+    def bottom_border(cols)
       result = String.new(BOX_CHARS[:bot_left_corner])
       result << BOX_CHARS[:horz_line]
-      result << (BOX_CHARS[:bot_vertical_line] + BOX_CHARS[:horz_line]) * (n - 1)
+      result << (BOX_CHARS[:bot_vertical_line] + BOX_CHARS[:horz_line]) * (cols - 1)
       result << BOX_CHARS[:bot_right_corner]
       result
     end

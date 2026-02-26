@@ -25,45 +25,12 @@ module Connect4Game
       next_states.include?(val_int)
     end
 
+    def place_token
+      raise NotImplementedError, 'Player, place_token requires player/game specific subclass'
+    end
+
     def move_token
-      true
-    end
-  end
-
-  # human player
-  class Human < Player
-    def place_token(token)
-      # player accepts an object with obj.next_states
-      self.next_states = token.next_states.map(&:col)
-      selection = next_states.index(user_input)
-      token.cur_state = token.next_states[selection]
-      tokens << token
-      token
-    end
-
-    def user_input
-      val = 'a'
-      until valid_selection?(val)
-        print 'Select column: '
-        val = input.get
-      end
-      val.to_i
-    end
-  end
-
-  # computer supplies random results
-  class Random < Player
-    def place_token(token)
-      token.cur_state = token.next_states.sample
-      tokens << token
-      token
-    end
-  end
-
-  # define user input method
-  class UserInput
-    def get
-      $stdin.gets.chomp
+      raise NotImplementedError, 'Player, move_token requires player/game specific subclass'
     end
   end
 end

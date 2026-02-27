@@ -27,9 +27,21 @@ describe Connect4Game::Connect4play do
     let(:token2state) { Connect4Game::Connect4TokenState.new(row: 1, col: 1) }
     let(:token3state) { Connect4Game::Connect4TokenState.new(row: 0, col: 2) }
 
-    let(:token1) { Connect4Game::Token.new(cur_state: token1state) }
-    let(:token2) { Connect4Game::Token.new(cur_state: token2state) }
-    let(:token3) { Connect4Game::Token.new(cur_state: token3state) }
+    let(:token1) do
+      Connect4Game::Token.new(
+        owner: player1, cur_state: token1state
+      )
+    end
+    let(:token2) do
+      Connect4Game::Token.new(
+        owner: player1, cur_state: token2state
+      )
+    end
+    let(:token3) do
+      Connect4Game::Token.new(
+        owner: player1, cur_state: token3state
+      )
+    end
 
     before do
       allow(c4p).to receive(:setup_new_game)
@@ -50,18 +62,22 @@ describe Connect4Game::Connect4play do
     it 'fill one entire row.' do
       (0...6).each do |i|
         token_state = Connect4Game::Connect4TokenState.new(row: i, col: 0)
-        token = Connect4Game::Token.new(cur_state: token_state)
+        token = Connect4Game::Token.new(
+          owner: player1, cur_state: token_state
+        )
         c4p.update_board(token)
       end
       expect(c4p.connect4_board[0].length).to eql(6)
-      expect(c4p).not_to be_full
+      expect(c4p.draw?).to eql(false)
       expect(c4p.open_columns).to eql([1, 2, 3, 4, 5, 6])
     end
     it 'fill all rows, board is full.' do
       (0...7).each do |j|
         (0...6).each do |i|
           token_state = Connect4Game::Connect4TokenState.new(row: i, col: j)
-          token = Connect4Game::Token.new(cur_state: token_state)
+          token = Connect4Game::Token.new(
+            owner: player1, cur_state: token_state
+          )
           c4p.update_board(token)
         end
         expect(c4p.connect4_board[j].length).to eql(6)
@@ -69,7 +85,7 @@ describe Connect4Game::Connect4play do
         expect(c4p.connect4_board[j][5].cur_state.col).to eql(j)
       end
       expect(c4p.open_columns).to eql([])
-      expect(c4p).to be_full
+      expect(c4p).to be_draw
       expect(c4p).to be_game_over
     end
   end

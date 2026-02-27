@@ -13,6 +13,10 @@ module Connect4Game
       @rendered_board_nb = ''
     end
 
+    def return_xo_array(board:, response: -> { xo_array })
+      ascii_state_rep(board: board, response: response)
+    end
+
     def render(board:, response: -> { rendered_board })
       ascii_state_rep(board: board, response: response)
     end

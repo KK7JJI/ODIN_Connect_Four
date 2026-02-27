@@ -5,15 +5,17 @@ module Connect4Game
   # store current state of the game.
   class Connect4play < GamePlay
     include Connect4Game::Constants
-    attr_accessor :connect4_board, :renderer
+    attr_accessor :connect4_board, :renderer, :gameover
 
     def initialize(name: 'Connect4',
                    players: nil,
-                   renderer: C4Ascii4Renderer.new)
+                   renderer: C4Ascii4Renderer.new,
+                   gameover: GameOver.new)
       super(game_name: name, players: players, renderer: renderer)
       @connect4_board = Array.new(GAME_COLUMNS) { [] }
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
+      @gameover = gameover
     end
 
     def add_new_player_tokens(player:)
@@ -35,14 +37,18 @@ module Connect4Game
     end
 
     def game_over?
-      # GameOver.new(renderer.render(response: -> { xo_array }))
-      return true if full?
+      return true if draw?
+      return true if winner?
 
       false
     end
 
-    def full?
-      open_columns == []
+    def draw?
+      gameover.draw?(renderer.return_xo_array(board: connect4_board))
+    end
+
+    def winner?
+      gameover.winner?(renderer.return_xo_array(board: connect4_board))
     end
 
     def compute_next_states(token)

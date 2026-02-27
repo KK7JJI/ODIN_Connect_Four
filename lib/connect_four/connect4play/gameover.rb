@@ -4,24 +4,17 @@ module Connect4Game
   # end of game logic
   class GameOver
     include Constants
-    attr_accessor :win, :all_diag_coords, :gameboard,
-                  :row_match, :col_match, :diag_match
+    attr_accessor :gameboard, :row_match, :col_match, :diag_match
 
-    def initialize(board: xo_array,
-                   row_match: RowMatch.new,
+    def initialize(row_match: RowMatch.new,
                    col_match: ColMatch.new,
                    diag_match: DiagMatch.new)
-      @win = /X{4}|O{4}/
-      @gameboard = board
       @row_match = row_match
       @col_match = col_match
       @diag_match = diag_match
     end
 
-    def winner?
-      # gameboard.each do |row|
-      #   puts row.inspect
-      # end
+    def winner?(gameboard)
       return true if row_match?(gameboard)
       return true if column_match?(gameboard)
       return true if diagonal_match?(gameboard)
@@ -29,8 +22,8 @@ module Connect4Game
       false
     end
 
-    def draw?
-      return true if full?
+    def draw?(gameboard)
+      return true if full?(gameboard)
 
       false
     end
@@ -47,11 +40,11 @@ module Connect4Game
       diag_match.match?(gameboard)
     end
 
-    def full?
+    def full?(gameboard)
       gameboard.flatten.none? { |elem| elem == ' ' }
     end
 
-    def empty?
+    def empty?(gameboard)
       gameboard.flatten.all? { |elem| elem == ' ' }
     end
   end

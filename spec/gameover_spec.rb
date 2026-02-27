@@ -19,34 +19,33 @@ require_relative '../lib/connect_four/connect4play/gameover/diagmatch'
 describe Connect4Game::GameOver do
   context 'empty/full board' do
     let(:xo_array) { Array.new(6) { Array.new(7) { ' ' } } }
-    subject(:go) { Connect4Game::GameOver.new(board: xo_array) }
+    subject(:go) { Connect4Game::GameOver.new }
     it '#empty?' do
-      expect(go).not_to be_full
-      expect(go).to be_empty
+      expect(go.full?(xo_array)).to eql(false)
+      expect(go.empty?(xo_array)).to eql(true)
     end
   end
 
   context 'board full of Xs' do
     let(:xo_array) { Array.new(6) { Array.new(7) { 'X' } } }
-    subject(:go) { Connect4Game::GameOver.new(board: xo_array) }
+    subject(:go) { Connect4Game::GameOver.new }
     it '#full?' do
-      expect(go).to be_full
-      expect(go).not_to be_empty
+      expect(go.full?(xo_array)).to eql(true)
+      expect(go.empty?(xo_array)).to eql(false)
     end
   end
 
   context 'board full of Os' do
     let(:xo_array) { Array.new(6) { Array.new(7) { 'O' } } }
-    subject(:go) { Connect4Game::GameOver.new(board: xo_array) }
+    subject(:go) { Connect4Game::GameOver.new }
     it '#full?' do
-      expect(go).to be_full
-      expect(go).not_to be_empty
+      expect(go.full?(xo_array)).to eql(true)
+      expect(go.empty?(xo_array)).to eql(false)
     end
   end
 
   describe 'winner' do
     context '4 Xs on rows' do
-      xo_array = Array.new(6) { Array.new(7) { ' ' } }
       testrows_wins = [['X', 'X', 'X', 'X', ' ', ' ', ' '],
                        [' ', 'X', 'X', 'X', 'X', ' ', ' '],
                        [' ', ' ', 'X', 'X', 'X', 'X', ' '],
@@ -57,15 +56,14 @@ describe Connect4Game::GameOver do
                          [' ', ' ', 'X', 'O', 'X', 'X', ' '],
                          [' ', ' ', ' ', 'X', 'O', 'X', 'X']]
 
-      blankrow = Array.new(7) { ' ' }
-      subject(:go) { Connect4Game::GameOver.new(board: xo_array) }
+      subject(:go) { Connect4Game::GameOver.new }
 
       it 'test rows, win' do
         (0...6).each do |i|
           testrows_wins.each do |row|
-            go.gameboard[i] = row
-            expect(go).to be_winner
-            go.gameboard[i] = blankrow
+            gameboard = Array.new(6) { Array.new(7) { ' ' } }
+            gameboard[i] = row
+            expect(go.winner?(gameboard)).to eql(true)
           end
         end
       end
@@ -73,9 +71,9 @@ describe Connect4Game::GameOver do
       it 'test rows, not win' do
         (0...6).each do |i|
           testrows_notwin.each do |row|
-            go.gameboard[i] = row
-            expect(go).not_to be_winner
-            go.gameboard[i] = blankrow
+            gameboard = Array.new(6) { Array.new(7) { ' ' } }
+            gameboard[i] = row
+            expect(go.winner?(gameboard)).to eql(false)
           end
         end
       end
@@ -88,8 +86,6 @@ describe Connect4Game::GameOver do
     end
 
     context '4 X on columns' do
-      xo_array = Array.new(6) { Array.new(7) { ' ' } }
-
       testrows_wins = [['X', 'X', 'X', 'X', ' ', ' '],
                        [' ', 'X', 'X', 'X', 'X', ' '],
                        [' ', ' ', 'X', 'X', 'X', 'X']]
@@ -98,24 +94,26 @@ describe Connect4Game::GameOver do
                          [' ', 'X', 'O', 'X', 'X', ' '],
                          [' ', ' ', 'X', 'O', 'X', 'X']]
 
-      subject(:go) { Connect4Game::GameOver.new(board: xo_array) }
+      subject(:go) { Connect4Game::GameOver.new }
       it 'test cols, win' do
         (0...7).each do |i|
           testrows_wins.each do |row|
-            board = transpose(xo_array)
+            gameboard = Array.new(6) { Array.new(7) { ' ' } }
+            board = transpose(gameboard)
             board[i] = row
-            go.gameboard = transpose(board)
-            expect(go).to be_winner
+            gameboard = transpose(board)
+            expect(go.winner?(gameboard)).to eql(true)
           end
         end
       end
       it 'test cols, not win' do
         (0...7).each do |i|
           testrows_notwin.each do |row|
-            board = transpose(xo_array)
+            gameboard = Array.new(6) { Array.new(7) { ' ' } }
+            board = transpose(gameboard)
             board[i] = row
-            go.gameboard = transpose(board)
-            expect(go).not_to be_winner
+            gameboard = transpose(board)
+            expect(go.winner?(gameboard)).to eql(false)
           end
         end
       end
@@ -128,27 +126,25 @@ describe Connect4Game::GameOver do
     end
 
     context '4 O on diagonals' do
-      empty_array = Array.new(6) { Array.new(7) { ' ' } }
-      subject(:go) { Connect4Game::GameOver.new(board: empty_array) }
+      subject(:go) { Connect4Game::GameOver.new }
+
       it 'test diagonals, win' do
         go.diag_match.all_diag_coords.each do |coords|
-          xo_array = Array.new(6) { Array.new(7) { ' ' } }
+          gameboard = Array.new(6) { Array.new(7) { ' ' } }
           coords.each do |x, y|
-            xo_array[x][y] = 'O'
+            gameboard[x][y] = 'O'
           end
-          go.gameboard = xo_array
-          expect(go).to be_winner
+          expect(go.winner?(gameboard)).to eql(true)
         end
       end
       it 'test diagonals, win' do
         go.diag_match.all_diag_coords.each do |coords|
           stones = %w[X O]
-          xo_array = Array.new(6) { Array.new(7) { ' ' } }
+          gameboard = Array.new(6) { Array.new(7) { ' ' } }
           coords.each do |x, y|
-            xo_array[x][y] = stones.rotate![0]
+            gameboard[x][y] = stones.rotate![0]
           end
-          go.gameboard = xo_array
-          expect(go).not_to be_winner
+          expect(go.winner?(gameboard)).to eql(false)
         end
       end
     end

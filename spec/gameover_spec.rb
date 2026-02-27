@@ -12,6 +12,9 @@ require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
 require_relative '../lib/connect_four/connect4play/c4asciirenderer'
 require_relative '../lib/connect_four/connect4play/gameover'
+require_relative '../lib/connect_four/connect4play/gameover/rowmatch'
+require_relative '../lib/connect_four/connect4play/gameover/colmatch'
+require_relative '../lib/connect_four/connect4play/gameover/diagmatch'
 
 describe Connect4Game::GameOver do
   context 'empty/full board' do
@@ -128,20 +131,17 @@ describe Connect4Game::GameOver do
       empty_array = Array.new(6) { Array.new(7) { ' ' } }
       subject(:go) { Connect4Game::GameOver.new(board: empty_array) }
       it 'test diagonals, win' do
-        go.all_diag_coords.each do |coords|
+        go.diag_match.all_diag_coords.each do |coords|
           xo_array = Array.new(6) { Array.new(7) { ' ' } }
           coords.each do |x, y|
             xo_array[x][y] = 'O'
           end
           go.gameboard = xo_array
-          # puts ''
-          # p_array(go.gameboard)
-          # puts ''
           expect(go).to be_winner
         end
       end
       it 'test diagonals, win' do
-        go.all_diag_coords.each do |coords|
+        go.diag_match.all_diag_coords.each do |coords|
           stones = %w[X O]
           xo_array = Array.new(6) { Array.new(7) { ' ' } }
           coords.each do |x, y|

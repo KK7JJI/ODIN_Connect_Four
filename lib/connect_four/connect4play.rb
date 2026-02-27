@@ -16,10 +16,6 @@ module Connect4Game
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end
 
-    def configure_renderer
-      @renderer.connect4_board = connect4_board
-    end
-
     def add_new_player_tokens(player:)
       Array.new(@new_tokens_per_turn) do
         Token.new(

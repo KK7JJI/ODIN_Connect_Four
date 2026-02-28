@@ -30,9 +30,7 @@ module Connect4Game
     end
 
     def place_token(player:, token:)
-      compute_next_states(token)
       token = player.place_token(token)
-      add_node(Node.new(parent: nil, token: token))
       update_board(token)
     end
 

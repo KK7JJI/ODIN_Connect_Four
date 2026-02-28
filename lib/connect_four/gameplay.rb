@@ -8,13 +8,15 @@ module Connect4Game
 
     def initialize(game_name: 'generic game',
                    players: nil,
-                   renderer: SimpleAsciiRenderer.new)
+                   renderer: SimpleAsciiRenderer.new,
+                   gameover: nil)
       @game_name = game_name
       @players = players || []
       @last_node = nil
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
       @renderer = renderer
+      @gameover = gameover
     end
 
     def play_round(on_state_change: nil)
@@ -53,7 +55,9 @@ module Connect4Game
       new_player_tokens = add_new_player_tokens(player: player)
       while new_player_tokens.length.positive?
         token = new_player_tokens.shift
-        place_token(player: player, token: token)
+        compute_next_states(token)
+        token = place_token(player: player, token: token)
+        add_node(Node.new(parent: nil, token: token))
         break if game_over?
       end
     end
@@ -65,9 +69,7 @@ module Connect4Game
     end
 
     def place_token(player:, token:)
-      compute_next_states(token)
-      token = player.place_token(token)
-      add_node(Node.new(parent: nil, token: token))
+      player.place_token(token)
     end
 
     def move_player_tokens(player:)

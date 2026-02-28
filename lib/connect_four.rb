@@ -19,6 +19,7 @@ require_relative 'connect_four/connect4play/gameover'
 require_relative 'connect_four/connect4play/gameover/rowmatch'
 require_relative 'connect_four/connect4play/gameover/colmatch'
 require_relative 'connect_four/connect4play/gameover/diagmatch'
+require_relative 'connect_four/connect4play/c4gameboard'
 
 # Entry point.  run.sh starts execution
 # of the program here.

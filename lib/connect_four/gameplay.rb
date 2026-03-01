@@ -82,7 +82,8 @@ module Connect4Game
     end
 
     def game_over?
-      raise NotImplementedError, 'game_over? must be implimented in a subclass.'
+      # expecting subclass, returns boolean
+      raise NotImplementedError, 'game_over? subclass required.'
     end
 
     def player_token_next_states(player)
@@ -92,9 +93,8 @@ module Connect4Game
     end
 
     def compute_next_states(token)
-      # expecting game specific override
-      token.next_states = []
-      token
+      # expecting subclass, returns token
+      raise NotImplementedError, 'compute_next_states? subclass required.'
     end
 
     def render_gamestate

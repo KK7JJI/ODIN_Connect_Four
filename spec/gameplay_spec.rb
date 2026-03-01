@@ -9,7 +9,7 @@ require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
 require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
-require_relative '../lib/connect_four/connect4play/c4asciirenderer'
+require_relative '../lib/connect_four/connect4play/c4renderer'
 
 describe Connect4Game::GamePlay do
   player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')

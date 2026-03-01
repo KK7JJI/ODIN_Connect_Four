@@ -7,15 +7,15 @@ module Connect4Game
   class C4GameBoard
     include Constants
 
-    attr_accessor :connect4_board, :renderer
+    attr_accessor :board, :renderer
 
     def initialize(renderer: nil)
-      @connect4_board = Array.new(GAME_COLUMNS) { [] }
+      @board = Array.new(GAME_COLUMNS) { [] }
       @renderer = renderer
     end
 
     def open_columns
-      row_lens = connect4_board.map(&:length)
+      row_lens = board.map(&:length)
       (0...row_lens.length).to_a.select do |i|
         row_lens[i] < GAME_ROWS
       end
@@ -25,19 +25,19 @@ module Connect4Game
       # call to c4asciirenderer
       raise NotImplementedError if renderer.nil?
 
-      renderer.return_xo_array(board: connect4_board)
+      renderer.return_xo_array(board: board)
     end
 
     def update_board(token)
-      connect4_board[token.cur_state.col] << token
+      board[token.cur_state.col] << token
     end
 
     def full?
-      connect4_board.none? { |row| row.length < GAME_ROWS }
+      board.none? { |row| row.length < GAME_ROWS }
     end
 
     def empty?
-      connect4_board.all?(&:empty?)
+      board.all?(&:empty?)
     end
 
     private
@@ -46,7 +46,7 @@ module Connect4Game
       open_columns.map do |i|
         Connect4TokenState.new(
           col: i,
-          row: connect4_board[i].length
+          row: board[i].length
         )
       end
     end

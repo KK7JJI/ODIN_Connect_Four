@@ -2,31 +2,35 @@
 
 module Connect4Game
   # generate an ascii representation of the gamestate
-  class C4Ascii4Renderer
+  class C4Renderer
     include Connect4Game::Constants
-    attr_accessor :connect4_board, :rendered_board, :rendered_board_nb,
-                  :borders, :xo_array
+    attr_accessor :board, :rendered_board, :rendered_board_nb, :xo_array
 
     def initialize
+      @board = nil
       @xo_array = []
       @rendered_board = ''
       @rendered_board_nb = ''
     end
 
     def return_xo_array(board:, response: -> { xo_array })
-      ascii_state_rep(board: board, response: response)
+      requested_state_rep(board: board, response: response)
     end
 
-    def render(board:, response: -> { rendered_board })
-      ascii_state_rep(board: board, response: response)
+    def return_board_with_borders(board:, response: -> { rendered_board })
+      requested_state_rep(board: board, response: response)
     end
 
-    def ascii_state_rep(board:, response:)
-      return 'no data' if board.nil?
+    def return_board_without_borders(board:, response: -> { rendered_board_nb })
+      requested_state_rep(board: board, response: response)
+    end
 
-      self.xo_array = transpose(board)
-      self.rendered_board = board_with_borders
-      self.rendered_board_nb = board_without_borders
+    private
+
+    def requested_state_rep(board:, response:)
+      self.xo_array = xo_rep_of_board(board: board)
+      self.rendered_board = render_board_with_borders
+      self.rendered_board_nb = render_board_without_borders
 
       response&.call
     end
@@ -35,18 +39,20 @@ module Connect4Game
       token.icon
     end
 
-    def transpose(arr, fill: ' ')
-      # arr rows are game columns,
-      # row[0] is at the bottom of the board.
-      arr1 = arr.map do |row|
+    def xo_rep_of_board(board:)
+      # player 1: X, player 2: O
+      transpose(board.map do |row|
         row.map { |token| token.owner.icon }
-      end
+      end)
+    end
+
+    def transpose(arr, fill: ' ')
       (GAME_ROWS.times.map do |i|
-        arr1.map { |row| row[i] || fill }
+        arr.map { |row| row[i] || fill }
       end).reverse
     end
 
-    def board_with_borders
+    def render_board_with_borders
       disp = []
 
       top_border = top_border(GAME_COLUMNS)
@@ -63,7 +69,7 @@ module Connect4Game
       disp.join("\n")
     end
 
-    def board_without_borders
+    def render_board_without_borders
       disp = []
       xo_array.each do |row|
         disp << row.join('')

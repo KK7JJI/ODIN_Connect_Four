@@ -9,10 +9,10 @@ module Connect4Game
 
     def initialize(name: 'Connect4',
                    players: nil,
-                   renderer: C4Ascii4Renderer.new,
+                   renderer: C4Renderer.new,
                    gameover: GameOver.new)
       super(game_name: name, players: players, renderer: renderer)
-      @connect4_board = Array.new(GAME_COLUMNS) { [] }
+      @connect4_board = Connect4Game::C4GameBoard.new(renderer: renderer)
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
       @gameover = gameover
@@ -31,7 +31,7 @@ module Connect4Game
 
     def place_token(player:, token:)
       token = player.place_token(token)
-      update_board(token)
+      connect4_board.update_board(token)
     end
 
     def game_over?
@@ -42,11 +42,11 @@ module Connect4Game
     end
 
     def draw?
-      gameover.draw?(renderer.return_xo_array(board: connect4_board))
+      gameover.draw?(renderer.return_xo_array)
     end
 
     def winner?
-      gameover.winner?(renderer.return_xo_array(board: connect4_board))
+      gameover.winner?(renderer.return_xo_array)
     end
 
     def compute_next_states(token)
@@ -69,12 +69,8 @@ module Connect4Game
       end
     end
 
-    def update_board(token)
-      connect4_board[token.cur_state.col] << token
-    end
-
     def render_gamestate
-      renderer.render(board: connect4_board)
+      renderer.return_board_with_borders(board: connect4_board.board)
     end
   end
 end

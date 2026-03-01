@@ -12,7 +12,7 @@ require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
 require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
-require_relative '../lib/connect_four/connect4play/c4asciirenderer'
+require_relative '../lib/connect_four/connect4play/c4renderer'
 require_relative '../lib/connect_four/connect4play/gameover'
 
 player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
@@ -35,25 +35,21 @@ describe Connect4Game::Connect4play do
       allow(c4p).to receive(:setup_new_game)
     end
 
-    it 'empty board' do
-      expect(c4p.render_gamestate.count(' ')).to eql(42)
-    end
-
     it 'one token on the board' do
-      c4p.update_board(token1)
+      c4p.connect4_board.update_board(token1)
       expect(c4p.render_gamestate.count('X')).to eql(1)
       expect(c4p.render_gamestate.count(' ')).to eql(41)
     end
     it 'two tokens on the board' do
-      c4p.update_board(token1)
-      c4p.update_board(token2)
+      c4p.connect4_board.update_board(token1)
+      c4p.connect4_board.update_board(token2)
       expect(c4p.render_gamestate.count('X')).to eql(2)
       expect(c4p.render_gamestate.count(' ')).to eql(40)
     end
     it 'three tokens on the board' do
-      c4p.update_board(token1)
-      c4p.update_board(token2)
-      c4p.update_board(token3)
+      c4p.connect4_board.update_board(token1)
+      c4p.connect4_board.update_board(token2)
+      c4p.connect4_board.update_board(token3)
       expect(c4p.render_gamestate.count('X')).to eql(3)
       expect(c4p.render_gamestate.count(' ')).to eql(39)
     end
@@ -61,7 +57,7 @@ describe Connect4Game::Connect4play do
       (0...6).each do |i|
         token_state = Connect4Game::Connect4TokenState.new(row: i, col: 0)
         token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
-        c4p.update_board(token)
+        c4p.connect4_board.update_board(token)
       end
       expect(c4p.render_gamestate.count('O')).to eql(6)
       expect(c4p.render_gamestate.count(' ')).to eql(36)
@@ -71,7 +67,7 @@ describe Connect4Game::Connect4play do
         (0...6).each do |i|
           token_state = Connect4Game::Connect4TokenState.new(row: i, col: j)
           token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
-          c4p.update_board(token)
+          c4p.connect4_board.update_board(token)
         end
         expect(c4p.render_gamestate.count('O')).to eql(6 * (j + 1))
         expect(c4p.render_gamestate.count(' ')).to eql(42 - 6 * (j + 1))

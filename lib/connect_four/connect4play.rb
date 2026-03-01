@@ -53,23 +53,10 @@ module Connect4Game
     end
 
     def compute_next_states(token)
-      token.next_states = open_positions
-    end
-
-    def open_positions
-      open_columns.map do |i|
-        Connect4TokenState.new(
-          col: i,
-          row: connect4_board[i].length
-        )
+      token.next_states = connect4_board.open_columns.map do |col|
+        Connect4Game::Connect4TokenState.new(col: col)
       end
-    end
-
-    def open_columns
-      row_lens = connect4_board.map(&:length)
-      (0...row_lens.length).to_a.select do |i|
-        row_lens[i] < GAME_ROWS
-      end
+      token
     end
 
     def render_gamestate

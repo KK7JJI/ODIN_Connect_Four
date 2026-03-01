@@ -4,11 +4,12 @@ module Connect4Game
   # end of game logic
   class GameOver
     include Constants
-    attr_accessor :gameboard, :row_match, :col_match, :diag_match
+    attr_accessor :connect4_board, :row_match, :col_match, :diag_match
 
     def initialize(row_match: RowMatch.new,
                    col_match: ColMatch.new,
                    diag_match: DiagMatch.new)
+      @connect4_board = nil
       @row_match = row_match
       @col_match = col_match
       @diag_match = diag_match

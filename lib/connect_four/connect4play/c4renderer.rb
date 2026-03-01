@@ -4,31 +4,31 @@ module Connect4Game
   # generate an ascii representation of the gamestate
   class C4Renderer
     include Connect4Game::Constants
-    attr_accessor :board, :rendered_board, :rendered_board_nb, :xo_array
+    attr_accessor :connect4_board, :rendered_board, :rendered_board_nb, :xo_array
 
     def initialize
-      @board = nil
+      @connect4_board = nil
       @xo_array = []
       @rendered_board = ''
       @rendered_board_nb = ''
     end
 
-    def return_xo_array(board:, response: -> { xo_array })
-      requested_state_rep(board: board, response: response)
+    def return_xo_array(response: -> { xo_array })
+      requested_state_rep(response: response)
     end
 
-    def return_board_with_borders(board:, response: -> { rendered_board })
-      requested_state_rep(board: board, response: response)
+    def return_board_with_borders(response: -> { rendered_board })
+      requested_state_rep(response: response)
     end
 
-    def return_board_without_borders(board:, response: -> { rendered_board_nb })
-      requested_state_rep(board: board, response: response)
+    def return_board_without_borders(response: -> { rendered_board_nb })
+      requested_state_rep(response: response)
     end
 
     private
 
-    def requested_state_rep(board:, response:)
-      self.xo_array = xo_rep_of_board(board: board)
+    def requested_state_rep(response:)
+      self.xo_array = xo_rep_of_board
       self.rendered_board = render_board_with_borders
       self.rendered_board_nb = render_board_without_borders
 
@@ -39,9 +39,9 @@ module Connect4Game
       token.icon
     end
 
-    def xo_rep_of_board(board:)
+    def xo_rep_of_board
       # player 1: X, player 2: O
-      transpose(board.map do |row|
+      transpose(connect4_board.board.map do |row|
         row.map { |token| token.owner.icon }
       end)
     end

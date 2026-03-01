@@ -25,7 +25,7 @@ module Connect4Game
       # call to c4asciirenderer
       raise NotImplementedError if renderer.nil?
 
-      renderer.return_xo_array(board: board)
+      renderer.return_xo_array
     end
 
     def update_board(token)

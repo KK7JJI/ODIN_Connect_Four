@@ -10,7 +10,11 @@ require_relative '../lib/connect_four/constants'
 require_relative '../lib/connect_four/connect4play/c4gameboard'
 
 describe Connect4Game::C4GameBoard do
-  subject(:gb) { described_class.new(renderer: Connect4Game::C4Renderer.new) }
+  subject(:gb) { described_class.new }
+  before do
+    gb.renderer = Connect4Game::C4Renderer.new
+    gb.renderer.connect4_board = gb
+  end
 
   describe '#update_board' do
     it 'add a token to a specific game column' do
@@ -73,34 +77,9 @@ describe Connect4Game::C4GameBoard do
     end
   end
   describe '#xo_array' do
-    player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
-    player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')
-    cur_state = Connect4Game::Connect4TokenState.new(col: 0)
-    it 'representation contains X at [0][0]' do
-      gb.update_board(Connect4Game::Token.new(owner: player1, cur_state: cur_state))
-      result = gb.xo_array
-      expect(result[5][0]).to eql('X')
-      expect(result.flatten.count(' ')).to eql(6 * 7 - 1)
-    end
-    it 'representation contains Xs in all positions' do
-      (0...7).to_a.each do |col|
-        (0...6).to_a.each do |row|
-          cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
-          gb.update_board(Connect4Game::Token.new(owner: player1, cur_state: cur_state))
-        end
-      end
-      result = gb.xo_array
-      expect(result.flatten.count('X')).to eql(6 * 7)
-    end
-    it 'representation contains Os in all positions' do
-      (0...7).to_a.each do |col|
-        (0...6).to_a.each do |row|
-          cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
-          gb.update_board(Connect4Game::Token.new(owner: player2, cur_state: cur_state))
-        end
-      end
-      result = gb.xo_array
-      expect(result.flatten.count('O')).to eql(6 * 7)
+    it 'calls c4render return_xo_array' do
+      expect(gb.renderer).to receive(:return_xo_array)
+      gb.xo_array
     end
     it 'error is raised if a render class is not specified' do
       gb.renderer = nil

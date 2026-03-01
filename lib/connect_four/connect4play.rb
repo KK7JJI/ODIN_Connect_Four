@@ -9,13 +9,16 @@ module Connect4Game
 
     def initialize(name: 'Connect4',
                    players: nil,
-                   renderer: C4Renderer.new,
-                   gameover: GameOver.new)
+                   renderer: C4Renderer.new)
       super(game_name: name, players: players, renderer: renderer)
+      @renderer = renderer
+      @gameover = Connect4Game::GameOver.new
       @connect4_board = Connect4Game::C4GameBoard.new(renderer: renderer)
+      @renderer.connect4_board = @connect4_board
+      @gameover.connect4_board = @connect4_board
+
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
-      @gameover = gameover
     end
 
     def add_new_player_tokens(player:)
@@ -70,7 +73,7 @@ module Connect4Game
     end
 
     def render_gamestate
-      renderer.return_board_with_borders(board: connect4_board.board)
+      renderer.return_board_with_borders
     end
   end
 end

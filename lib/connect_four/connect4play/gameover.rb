@@ -15,7 +15,8 @@ module Connect4Game
       @diag_match = diag_match
     end
 
-    def winner?(gameboard)
+    def winner?
+      gameboard = connect4_board.xo_array
       return true if row_match?(gameboard)
       return true if column_match?(gameboard)
       return true if diagonal_match?(gameboard)
@@ -23,7 +24,8 @@ module Connect4Game
       false
     end
 
-    def draw?(gameboard)
+    def draw?
+      gameboard = connect4_board.xo_array
       return true if full?(gameboard)
 
       false

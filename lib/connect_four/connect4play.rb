@@ -38,18 +38,10 @@ module Connect4Game
     end
 
     def game_over?
-      return true if draw?
-      return true if winner?
+      return true if gameover.draw?
+      return true if gameover.winner?
 
       false
-    end
-
-    def draw?
-      gameover.draw?(renderer.return_xo_array)
-    end
-
-    def winner?
-      gameover.winner?(renderer.return_xo_array)
     end
 
     def compute_next_states(token)

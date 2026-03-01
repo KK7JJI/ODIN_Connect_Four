@@ -75,4 +75,16 @@ describe Connect4Game::Connect4play do
       expect(c4p.render_gamestate.count('O')).to eql(42)
     end
   end
+  context 'Debug issues' do
+    describe '#compute_next_states' do
+      let(:token1state) { Connect4Game::Connect4TokenState.new(row: 0, col: 1) }
+      let(:token1) { Connect4Game::Token.new(owner: player1, cur_state: token1state) }
+      it 'next_states is a list of tokenstates' do
+        result = c4p.compute_next_states(token1)
+        expect(
+          result.next_states.all? { |elem| elem.is_a?(Connect4Game::Connect4TokenState) }
+        ).to eql(true)
+      end
+    end
+  end
 end

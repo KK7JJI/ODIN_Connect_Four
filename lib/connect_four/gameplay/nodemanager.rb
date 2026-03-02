@@ -18,13 +18,12 @@ module Connect4Game
       self.last_node = node
     end
 
-    def all_nodes=(node: last_node)
-      traverse_nodes(node)
+    def game_nodes(node: last_node)
+      @all_nodes = traverse_nodes(node)
     end
 
-    def all_tokens=(node: last_node)
-      traverse_nodes(node)
-      all_tokens.map(&:token)
+    def played_tokens(node: last_node)
+      traverse_nodes(node).map(&:token)
     end
 
     private
@@ -33,7 +32,7 @@ module Connect4Game
       return [node] if node.parent.nil?
 
       nodes = traverse_nodes(node.parent)
-      nodes << node.parent
+      nodes << node
     end
   end
 end

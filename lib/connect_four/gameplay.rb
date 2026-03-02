@@ -4,17 +4,18 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class GamePlay
     include Connect4Game::Constants
-    attr_accessor :players, :last_node
+    attr_accessor :players, :node_manager
 
     def initialize(game_name: 'generic game',
                    players: nil,
                    renderer: SimpleAsciiRenderer.new,
-                   gameover: nil)
+                   gameover: nil,
+                   node_manager: NodeManager.new)
       @game_name = game_name
       @players = players || []
-      @last_node = nil
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
+      @node_manager = node_manager
       @renderer = renderer
       @gameover = gameover
     end
@@ -57,7 +58,7 @@ module Connect4Game
         token = new_player_tokens.shift
         compute_next_states(token)
         token = place_token(player: player, token: token)
-        add_node(Node.new(parent: nil, token: token))
+        node_manager.add_node(token: token)
         break if game_over?
       end
     end
@@ -76,7 +77,7 @@ module Connect4Game
       @token_moves_per_turn.times do
         player_token_next_states(player)
         token = player.move_token
-        add_node(Node.new(parent: nil, token: token))
+        node_manager.add_node(token: token)
         break if game_over?
       end
     end
@@ -98,12 +99,7 @@ module Connect4Game
     end
 
     def render_gamestate
-      @renderer.render(last_node)
-    end
-
-    def add_node(node)
-      node.parent = last_node
-      self.last_node = node
+      @renderer.render(node_manager.last_node)
     end
   end
 end

@@ -15,6 +15,7 @@ module Connect4Game
       tokens = []
       node = last_node
       while node
+
         tokens << node.token.token_name
         node = node.parent
       end

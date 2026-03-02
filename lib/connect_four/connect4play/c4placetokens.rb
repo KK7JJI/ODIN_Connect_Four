@@ -1,19 +1,22 @@
 # frozen_string_literal: true
 
 module Connect4Game
-  include Constants
-
   # Coordination for the connect 4 game.
-  class PlaceTokens
+  class C4PlaceTokens
     include Connect4Game::Constants
-    attr_accessor :node_manager, :new_tokens_per_turn, :nextstates,
-                  :gameover
 
-    def initialize(node_manager: nil, nextstates: nil, gameover: nil)
+    attr_accessor :node_manager, :new_tokens_per_turn, :nextstates,
+                  :connect4_board, :gameover
+
+    def initialize(node_manager: nil,
+                   nextstates: nil,
+                   gameover: nil,
+                   board: nil)
+      @connect4_board = board
       @node_manager = node_manager
       @nextstates = nextstates
       @gameover = gameover
-      @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
+      @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
     end
 
     def place_new_tokens(player:)
@@ -35,6 +38,7 @@ module Connect4Game
 
     def place_token(player:, token:)
       player.place_token(token)
+      connect4_board.update_board(token)
     end
   end
 end

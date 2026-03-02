@@ -4,7 +4,8 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class GamePlay
     include Connect4Game::Constants
-    attr_accessor :players, :node_manager, :nextstates
+    attr_accessor :players, :node_manager, :nextstates, :gameover,
+                  :placetokens
 
     def initialize(game_name: 'generic game',
                    players: nil)
@@ -15,19 +16,20 @@ module Connect4Game
 
       @node_manager = NodeManager.new
       @renderer = SimplerAsciiRenderer.new
-      @gameover = nil
+      @gameover = GameOver.new
       @nextstates = NextStates.new
-      # @placetokens = PlaceTokens.new(node_manager: node_manager,
-      #  nextstates: nextstates)
+      @placetokens = PlaceTokens.new(node_manager: node_manager,
+                                     nextstates: nextstates,
+                                     gameover: gameover)
     end
 
     def play_round(on_state_change: nil)
       setup_new_game
       on_state_change&.call(render_gamestate)
-      until game_over?
+      until gameover.game_over?
         players.each do |player|
           player_turn(player: player)
-          break if game_over?
+          break if gameover.game_over?
 
           on_state_change&.call(render_gamestate)
         end
@@ -37,8 +39,8 @@ module Connect4Game
 
     def player_turn(player:)
       puts player.name
-      place_new_tokens(player: player) if !game_over? && supports_new_tokens?
-      move_player_tokens(player: player) if !game_over? && supports_token_movement?
+      placetokens.place_new_tokens(player: player) if !gameover.game_over? && supports_new_tokens?
+      move_player_tokens(player: player) if !gameover.game_over? && supports_token_movement?
     end
 
     def supports_new_tokens?
@@ -53,40 +55,13 @@ module Connect4Game
       self.players = PlayerSetup.new.run_player_setup
     end
 
-    def place_new_tokens(player:)
-      new_player_tokens = add_new_player_tokens(player: player)
-      while new_player_tokens.length.positive?
-        token = new_player_tokens.shift
-        nextstates.request_next_states(token)
-        token = place_token(player: player, token: token)
-        node_manager.add_node(token: token)
-        break if game_over?
-      end
-    end
-
-    def add_new_player_tokens(player:)
-      Array.new(@new_tokens_per_turn) do
-        Token.new(token_name: 'stone', owner: player, desc: 'game piece')
-      end
-    end
-
-    def place_token(player:, token:)
-      player.place_token(token)
-    end
-
     def move_player_tokens(player:)
       @token_moves_per_turn.times do
         player_token_next_states(player)
         token = player.move_token
         node_manager.add_node(token: token)
-        break if game_over?
+        break if gameover.game_over?
       end
-    end
-
-    def game_over?
-      # expecting subclass, returns boolean
-
-      raise NotImplementedError, 'game_over? subclass required.' if gameover.nil?
     end
 
     def player_token_next_states(player)

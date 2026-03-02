@@ -2,7 +2,7 @@
 
 module Connect4Game
   # end of game logic
-  class GameOver
+  class C4GameOver
     include Constants
     attr_accessor :connect4_board, :row_match, :col_match, :diag_match
 
@@ -10,7 +10,7 @@ module Connect4Game
                    col_match: ColMatch.new,
                    diag_match: DiagMatch.new,
                    board: nil)
-      @connect4_board = nil
+      @connect4_board = board
       @row_match = row_match
       @col_match = col_match
       @diag_match = diag_match
@@ -21,6 +21,13 @@ module Connect4Game
       return true if row_match?(gameboard)
       return true if column_match?(gameboard)
       return true if diagonal_match?(gameboard)
+
+      false
+    end
+
+    def game_over?
+      return true if draw?
+      return true if winner?
 
       false
     end

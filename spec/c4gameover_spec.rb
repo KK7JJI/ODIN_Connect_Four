@@ -8,16 +8,18 @@ require_relative '../lib/connect_four/gameplay/token'
 require_relative '../lib/connect_four/gameplay/tokenstate'
 require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
 require_relative '../lib/connect_four/gameplay/node'
+require_relative '../lib/connect_four/gameplay/nodemanager'
+require_relative '../lib/connect_four/gameplay/gameover'
 require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
 require_relative '../lib/connect_four/connect4play/c4renderer'
-require_relative '../lib/connect_four/connect4play/gameover'
-require_relative '../lib/connect_four/connect4play/gameover/rowmatch'
-require_relative '../lib/connect_four/connect4play/gameover/colmatch'
-require_relative '../lib/connect_four/connect4play/gameover/diagmatch'
+require_relative '../lib/connect_four/connect4play/c4gameover'
+require_relative '../lib/connect_four/connect4play/c4gameover/rowmatch'
+require_relative '../lib/connect_four/connect4play/c4gameover/colmatch'
+require_relative '../lib/connect_four/connect4play/c4gameover/diagmatch'
 
-describe Connect4Game::GameOver do
-  subject(:go) { Connect4Game::GameOver.new }
+describe Connect4Game::C4GameOver do
+  subject(:go) { described_class.new }
   let(:gb) { instance_double(Connect4Game::C4GameBoard) }
   before do
     go.connect4_board = gb

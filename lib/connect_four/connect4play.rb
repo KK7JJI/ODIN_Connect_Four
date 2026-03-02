@@ -12,8 +12,12 @@ module Connect4Game
       super(game_name: name, players: players)
       @connect4_board = Connect4Game::C4GameBoard.new
       @renderer = Connect4Game::C4Renderer.new(board: connect4_board)
-      @gameover = Connect4Game::GameOver.new(board: connect4_board)
+      @gameover = Connect4Game::C4GameOver.new(board: connect4_board)
       @nextstates = Connect4Game::C4NextStates.new(board: connect4_board)
+      @placetokens = C4PlaceTokens.new(node_manager: node_manager,
+                                       nextstates: nextstates,
+                                       gameover: gameover,
+                                       board: connect4_board)
 
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
@@ -28,18 +32,6 @@ module Connect4Game
           cur_state: Connect4TokenState.new
         )
       end
-    end
-
-    def place_token(player:, token:)
-      token = player.place_token(token)
-      connect4_board.update_board(token)
-    end
-
-    def game_over?
-      return true if gameover.draw?
-      return true if gameover.winner?
-
-      false
     end
 
     def render_gamestate

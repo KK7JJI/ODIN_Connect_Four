@@ -6,6 +6,7 @@ require_relative '../lib/connect_four/gameplay'
 require_relative '../lib/connect_four/gameplay/token'
 require_relative '../lib/connect_four/gameplay/tokenstate'
 require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
+require_relative '../lib/connect_four/gameplay/nextstates'
 require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/gameplay/nodemanager'
 require_relative '../lib/connect_four/connect4play'
@@ -25,12 +26,18 @@ describe Connect4Game::GamePlay do
     )
   end
 
-  let(:renderer) { Connect4Game::SimplerAsciiRenderer.new }
   subject(:gp) do
     Connect4Game::GamePlay.new(
       players: players,
       renderer: renderer
     )
+  end
+
+  let(:renderer) { Connect4Game::SimplerAsciiRenderer.new }
+  let(:nextstates) { Connect4Game::NextStates.new }
+
+  before do
+    gp.nextstates = nextstates
   end
 
   describe '#play round' do
@@ -49,7 +56,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player2 move' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [true]
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -57,7 +64,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player1 first placed_token' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] * 2 + [true] * 3 + [true]
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -65,7 +72,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player1 first move_token' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] * 4 + [true] * 2 + [true]
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -73,7 +80,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player2 first place_token' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] + [true] * 4
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -81,7 +88,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player2 first move_token' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 3 + [true] * 3
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -89,7 +96,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player1 second place_token' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [false] + [false] + [true] * 4
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -112,7 +119,7 @@ describe Connect4Game::GamePlay do
     end
 
     it 'printed output is produced' do
-      allow(gp).to receive(:compute_next_states).and_return([])
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [false] + [false] + [true] * 4
       expect(gp).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })

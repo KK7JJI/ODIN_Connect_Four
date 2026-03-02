@@ -4,20 +4,20 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class GamePlay
     include Connect4Game::Constants
-    attr_accessor :players, :node_manager
+    attr_accessor :players, :node_manager, :nextstates
 
     def initialize(game_name: 'generic game',
                    players: nil,
                    renderer: SimpleAsciiRenderer.new,
-                   gameover: nil,
-                   node_manager: NodeManager.new)
+                   gameover: nil)
       @game_name = game_name
       @players = players || []
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
-      @node_manager = node_manager
+      @node_manager = NodeManager.new
       @renderer = renderer
       @gameover = gameover
+      @nextstates = NextStates.new
     end
 
     def play_round(on_state_change: nil)
@@ -56,7 +56,7 @@ module Connect4Game
       new_player_tokens = add_new_player_tokens(player: player)
       while new_player_tokens.length.positive?
         token = new_player_tokens.shift
-        compute_next_states(token)
+        nextstates.request_next_states(token)
         token = place_token(player: player, token: token)
         node_manager.add_node(token: token)
         break if game_over?
@@ -84,18 +84,14 @@ module Connect4Game
 
     def game_over?
       # expecting subclass, returns boolean
-      raise NotImplementedError, 'game_over? subclass required.'
+
+      raise NotImplementedError, 'game_over? subclass required.' if gameover.nil?
     end
 
     def player_token_next_states(player)
       player.tokens.each do |token|
-        token.next_states = compute_next_states(token)
+        token.next_states = nextstates.request_next_states(token)
       end
-    end
-
-    def compute_next_states(token)
-      # expecting subclass, returns token
-      raise NotImplementedError, 'compute_next_states? subclass required.'
     end
 
     def render_gamestate

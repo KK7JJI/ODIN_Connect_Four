@@ -5,7 +5,7 @@ module Connect4Game
   # store current state of the game.
   class Connect4play < GamePlay
     include Connect4Game::Constants
-    attr_accessor :connect4_board, :renderer, :gameover
+    attr_accessor :connect4_board, :renderer, :gameover, :nextstates
 
     def initialize(name: 'Connect4',
                    players: nil,
@@ -14,9 +14,10 @@ module Connect4Game
       @renderer = renderer
       @gameover = Connect4Game::GameOver.new
       @connect4_board = Connect4Game::C4GameBoard.new(renderer: renderer)
+      @nextstates = Connect4Game::C4NextStates.new
       @renderer.connect4_board = @connect4_board
       @gameover.connect4_board = @connect4_board
-
+      @nextstates.connect4_board = @connect4_board
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end
@@ -42,13 +43,6 @@ module Connect4Game
       return true if gameover.winner?
 
       false
-    end
-
-    def compute_next_states(token)
-      token.next_states = connect4_board.open_columns.map do |col|
-        Connect4Game::Connect4TokenState.new(col: col)
-      end
-      token
     end
 
     def render_gamestate

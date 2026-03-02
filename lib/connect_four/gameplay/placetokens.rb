@@ -18,7 +18,7 @@ module Connect4Game
     # returns:
     #
     # add_node is in GamePlay class
-    # compute_next_states is in GamePlay class
+    # request_next_states is in GamePlay class
     #
     # This communicates with Players, GamePlay,
     # The connect 4 version will also communicate with
@@ -28,7 +28,7 @@ module Connect4Game
       new_player_tokens = new_player_tokens(player: player)
       while new_player_tokens.length.positive?
         token = new_player_tokens.shift
-        compute_next_states(token)
+        request_next_states(token)
         token = place_token(player: player, token: token)
         node_manager.add_node(Node.new(parent: nil, token: token))
         break if game_over?

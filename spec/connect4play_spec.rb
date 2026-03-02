@@ -6,6 +6,7 @@ require_relative '../lib/connect_four/player/human'
 require_relative '../lib/connect_four/player/random'
 require_relative '../lib/connect_four/player/userinput'
 require_relative '../lib/connect_four/gameplay'
+require_relative '../lib/connect_four/gameplay/nextstates'
 require_relative '../lib/connect_four/gameplay/token'
 require_relative '../lib/connect_four/gameplay/tokenstate'
 require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
@@ -15,6 +16,7 @@ require_relative '../lib/connect_four/connect4play'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
 require_relative '../lib/connect_four/connect4play/c4renderer'
 require_relative '../lib/connect_four/connect4play/gameover'
+require_relative '../lib/connect_four/connect4play/c4nextstates'
 
 player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
 player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')
@@ -77,11 +79,11 @@ describe Connect4Game::Connect4play do
     end
   end
   context 'Debug issues' do
-    describe '#compute_next_states' do
+    describe '#request_next_states' do
       let(:token1state) { Connect4Game::Connect4TokenState.new(row: 0, col: 1) }
       let(:token1) { Connect4Game::Token.new(owner: player1, cur_state: token1state) }
       it 'next_states is a list of tokenstates' do
-        result = c4p.compute_next_states(token1)
+        result = c4p.nextstates.request_next_states(token1)
         expect(
           result.next_states.all? { |elem| elem.is_a?(Connect4Game::Connect4TokenState) }
         ).to eql(true)

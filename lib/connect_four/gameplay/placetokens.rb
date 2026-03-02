@@ -5,30 +5,19 @@ module Connect4Game
 
   # Coordination for the connect 4 game.
   class PlaceTokens
-    attr_accessor :node_manager, :new_tokens_per_turn
+    attr_accessor :node_manager, :new_tokens_per_turn, :nextstates
 
-    def initialize(node_manager: nil)
+    def initialize(node_manager: nil, nextstates: nil)
       @node_manager = node_manager
+      @nextstates = nextstates
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
     end
 
-    # inputs:
-    #  player
-    #
-    # returns:
-    #
-    # add_node is in GamePlay class
-    # request_next_states is in GamePlay class
-    #
-    # This communicates with Players, GamePlay,
-    # The connect 4 version will also communicate with
-    # Board
-    #
     def place_new_tokens(player:)
       new_player_tokens = new_player_tokens(player: player)
       while new_player_tokens.length.positive?
         token = new_player_tokens.shift
-        request_next_states(token)
+        nextstates.request_next_states(token)
         token = place_token(player: player, token: token)
         node_manager.add_node(Node.new(parent: nil, token: token))
         break if game_over?

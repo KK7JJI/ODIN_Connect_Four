@@ -76,14 +76,55 @@ describe Connect4Game::C4GameBoard do
       expect(gb).not_to be_full
     end
   end
-  describe '#xo_array' do
-    it 'calls c4render return_xo_array' do
-      expect(gb.renderer).to receive(:return_xo_array)
-      gb.xo_array
+  describe '#return_xo_array' do
+    let(:player1) { Connect4Game::Human.new(name: 'Player 1', icon: 'X') }
+    let(:player2) { Connect4Game::Human.new(name: 'Player 2', icon: 'O') }
+    it 'empty gameboard' do
+      result = gb.xo_array
+      expect(result.flatten.all? { |elem| elem == ' ' }).to eql(true)
+      expect(result.is_a?(Array)).to eql(true)
+      expect(result.all? { |row| row.is_a?(Array) })
     end
-    it 'error is raised if a render class is not specified' do
-      gb.renderer = nil
-      expect { gb.xo_array }.to raise_error(NotImplementedError)
+    it 'one token on column 0' do
+      token = Connect4Game::Token.new(owner: player1)
+      token.cur_state = Connect4Game::Connect4TokenState.new(col: 0)
+      gb.update_board(token)
+      result = gb.xo_array
+      expect(result[5][0]).to eql('X')
+      expect(result.flatten.count(' ')).to eql(6 * 7 - 1)
+      expect(result.is_a?(Array)).to eql(true)
+      expect(result.all? { |row| row.is_a?(Array) })
+    end
+
+    it 'fill columns one at a time Xs' do
+      result = ''
+      (0...7).each do |col|
+        (0...6).each do |row|
+          cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
+          gb.update_board(
+            Connect4Game::Token.new(owner: player1, cur_state: cur_state)
+          )
+        end
+        result = gb.xo_array
+        expect(result.flatten.count('X')).to eql((col + 1) * 6)
+      end
+      expect(result.is_a?(Array)).to eql(true)
+      expect(result.all? { |row| row.is_a?(Array) })
+    end
+    it 'fill columns one at a time Xs' do
+      result = ''
+      (0...7).each do |col|
+        (0...6).each do |row|
+          cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
+          gb.update_board(
+            Connect4Game::Token.new(owner: player2, cur_state: cur_state)
+          )
+        end
+        result = gb.xo_array
+        expect(result.flatten.count('O')).to eql((col + 1) * 6)
+      end
+      expect(result.is_a?(Array)).to eql(true)
+      expect(result.all? { |row| row.is_a?(Array) })
     end
   end
 end

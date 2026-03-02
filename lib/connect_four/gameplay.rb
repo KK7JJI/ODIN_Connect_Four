@@ -7,17 +7,18 @@ module Connect4Game
     attr_accessor :players, :node_manager, :nextstates
 
     def initialize(game_name: 'generic game',
-                   players: nil,
-                   renderer: SimpleAsciiRenderer.new,
-                   gameover: nil)
+                   players: nil)
       @game_name = game_name
       @players = players || []
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
+
       @node_manager = NodeManager.new
-      @renderer = renderer
-      @gameover = gameover
+      @renderer = SimplerAsciiRenderer.new
+      @gameover = nil
       @nextstates = NextStates.new
+      # @placetokens = PlaceTokens.new(node_manager: node_manager,
+      #  nextstates: nextstates)
     end
 
     def play_round(on_state_change: nil)

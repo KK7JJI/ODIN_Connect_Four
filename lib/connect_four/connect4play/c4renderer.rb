@@ -6,8 +6,8 @@ module Connect4Game
     include Connect4Game::Constants
     attr_accessor :connect4_board, :rendered_board, :rendered_board_nb, :xo_array
 
-    def initialize
-      @connect4_board = nil
+    def initialize(board: nil)
+      @connect4_board = board
       @xo_array = []
       @rendered_board = ''
       @rendered_board_nb = ''
@@ -41,15 +41,7 @@ module Connect4Game
 
     def xo_rep_of_board
       # player 1: X, player 2: O
-      transpose(connect4_board.board.map do |row|
-        row.map { |token| token.owner.icon }
-      end)
-    end
-
-    def transpose(arr, fill: ' ')
-      (GAME_ROWS.times.map do |i|
-        arr.map { |row| row[i] || fill }
-      end).reverse
+      connect4_board.xo_array
     end
 
     def render_board_with_borders

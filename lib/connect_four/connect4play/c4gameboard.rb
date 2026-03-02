@@ -11,7 +11,6 @@ module Connect4Game
 
     def initialize(renderer: nil)
       @board = Array.new(GAME_COLUMNS) { [] }
-      @renderer = renderer
     end
 
     def open_columns
@@ -22,10 +21,10 @@ module Connect4Game
     end
 
     def xo_array
-      # call to c4asciirenderer
-      raise NotImplementedError if renderer.nil?
-
-      renderer.return_xo_array
+      # player 1: X, player 2: O
+      transpose(board.map do |row|
+        row.map { |token| token.owner.icon }
+      end)
     end
 
     def update_board(token)
@@ -41,6 +40,12 @@ module Connect4Game
     end
 
     private
+
+    def transpose(arr, fill: ' ')
+      (GAME_ROWS.times.map do |i|
+        arr.map { |row| row[i] || fill }
+      end).reverse
+    end
 
     def open_positions
       open_columns.map do |i|

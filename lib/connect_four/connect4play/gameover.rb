@@ -8,7 +8,8 @@ module Connect4Game
 
     def initialize(row_match: RowMatch.new,
                    col_match: ColMatch.new,
-                   diag_match: DiagMatch.new)
+                   diag_match: DiagMatch.new,
+                   board: nil)
       @connect4_board = nil
       @row_match = row_match
       @col_match = col_match

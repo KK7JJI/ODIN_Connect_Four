@@ -8,16 +8,13 @@ module Connect4Game
     attr_accessor :connect4_board, :renderer, :gameover, :nextstates
 
     def initialize(name: 'Connect4',
-                   players: nil,
-                   renderer: C4Renderer.new)
-      super(game_name: name, players: players, renderer: renderer)
-      @renderer = renderer
-      @gameover = Connect4Game::GameOver.new
-      @connect4_board = Connect4Game::C4GameBoard.new(renderer: renderer)
-      @nextstates = Connect4Game::C4NextStates.new
-      @renderer.connect4_board = @connect4_board
-      @gameover.connect4_board = @connect4_board
-      @nextstates.connect4_board = @connect4_board
+                   players: nil)
+      super(game_name: name, players: players)
+      @connect4_board = Connect4Game::C4GameBoard.new
+      @renderer = Connect4Game::C4Renderer.new(board: connect4_board)
+      @gameover = Connect4Game::GameOver.new(board: connect4_board)
+      @nextstates = Connect4Game::C4NextStates.new(board: connect4_board)
+
       @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end

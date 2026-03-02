@@ -28,16 +28,8 @@ describe Connect4Game::GamePlay do
 
   subject(:gp) do
     Connect4Game::GamePlay.new(
-      players: players,
-      renderer: renderer
+      players: players
     )
-  end
-
-  let(:renderer) { Connect4Game::SimplerAsciiRenderer.new }
-  let(:nextstates) { Connect4Game::NextStates.new }
-
-  before do
-    gp.nextstates = nextstates
   end
 
   describe '#play round' do

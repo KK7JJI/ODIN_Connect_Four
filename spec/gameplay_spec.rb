@@ -3,6 +3,7 @@
 require_relative '../lib/connect_four/gameplay/nextstates'
 require_relative '../lib/connect_four/gameplay/nodemanager'
 require_relative '../lib/connect_four/gameplay/node'
+
 describe Connect4Game::GamePlay do
   player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
   player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')

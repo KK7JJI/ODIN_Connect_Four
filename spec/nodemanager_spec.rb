@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../lib/connect_four/gameplay/token'
-require_relative '../lib/connect_four/gameplay/tokenstate'
-require_relative '../lib/connect_four/gameplay/node'
 require_relative '../lib/connect_four/gameplay/nodemanager'
 
 describe Connect4Game::NodeManager do

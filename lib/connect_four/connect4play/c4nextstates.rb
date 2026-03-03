@@ -17,7 +17,6 @@ module Connect4Game
       token.next_states = connect4_board.open_columns.map do |col|
         Connect4Game::Connect4TokenState.new(col: col)
       end
-      token
     end
   end
 end

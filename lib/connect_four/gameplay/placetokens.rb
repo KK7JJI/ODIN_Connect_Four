@@ -20,7 +20,7 @@ module Connect4Game
       new_player_tokens = new_player_tokens(player: player)
       while new_player_tokens.length.positive?
         token = new_player_tokens.shift
-        nextstates.request_next_states(token)
+        token.next_states = nextstates.request_next_states(token)
         token = place_token(player: player, token: token)
         node_manager.add_node(token: token)
         break if gameover.game_over?
@@ -28,8 +28,11 @@ module Connect4Game
     end
 
     def new_player_tokens(player:)
-      Array.new(@new_tokens_per_turn) do
-        Token.new(token_name: 'stone', owner: player, desc: 'game piece')
+      Array.new(new_tokens_per_turn) do
+        Token.new(token_name: 'stone',
+                  owner: player,
+                  desc: 'game piece',
+                  cur_state: TokenState.new)
       end
     end
 

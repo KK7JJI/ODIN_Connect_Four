@@ -7,7 +7,6 @@ module Connect4Game
   class NextStates
     def request_next_states(token)
       token.next_states = []
-      token
     end
   end
 end

@@ -16,6 +16,7 @@ module Connect4Game
       node = Node.new(parent: nil, token: token)
       node.parent = last_node
       self.last_node = node
+      node
     end
 
     def game_nodes(node: last_node)

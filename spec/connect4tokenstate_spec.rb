@@ -1,4 +1,6 @@
+require_relative '../lib/connect_four/constants'
 require_relative '../lib/connect_four/gameplay/tokenstate'
+require_relative '../lib/connect_four/connect4play/connect4tokenstate'
 
 describe Connect4Game::Connect4TokenState do
   subject(:token) { described_class.new }

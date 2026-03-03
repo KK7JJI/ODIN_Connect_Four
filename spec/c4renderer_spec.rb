@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../lib/connect_four/player'
-require_relative '../lib/connect_four/player/human'
-require_relative '../lib/connect_four/player/random'
-require_relative '../lib/connect_four/player/userinput'
-require_relative '../lib/connect_four/connect4play/c4renderer'
-require_relative '../lib/connect_four/connect4play/c4gameboard'
 require_relative '../lib/connect_four/constants'
-require_relative '../lib/connect_four/gameplay/token'
-require_relative '../lib/connect_four/gameplay/tokenstate'
-require_relative '../lib/connect_four/connect4play/connect4tokenstate'
+require_relative '../lib/connect_four/connect4play/c4renderer'
 
 describe Connect4Game::C4Renderer do
   subject(:c4render) { described_class.new }

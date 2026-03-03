@@ -1,28 +1,14 @@
 # frozen_string_literal: true
 
 require_relative '../lib/connect_four/constants'
+require_relative '../lib/connect_four/gameplay'
+require_relative '../lib/connect_four/connect4play'
+require_relative '../lib/connect_four/connect4play/c4nextstates'
 require_relative '../lib/connect_four/player'
 require_relative '../lib/connect_four/player/human'
 require_relative '../lib/connect_four/player/random'
 require_relative '../lib/connect_four/player/userinput'
-require_relative '../lib/connect_four/gameplay'
-require_relative '../lib/connect_four/gameplay/nextstates'
-require_relative '../lib/connect_four/gameplay/placetokens'
-require_relative '../lib/connect_four/gameplay/token'
-require_relative '../lib/connect_four/gameplay/tokenstate'
 require_relative '../lib/connect_four/gameplay/simpleasciirenderer'
-require_relative '../lib/connect_four/gameplay/node'
-require_relative '../lib/connect_four/gameplay/nodemanager'
-require_relative '../lib/connect_four/gameplay/gameover'
-require_relative '../lib/connect_four/connect4play'
-require_relative '../lib/connect_four/connect4play/connect4tokenstate'
-require_relative '../lib/connect_four/connect4play/c4renderer'
-require_relative '../lib/connect_four/connect4play/c4placetokens'
-require_relative '../lib/connect_four/connect4play/c4gameover'
-require_relative '../lib/connect_four/connect4play/c4gameover/rowmatch'
-require_relative '../lib/connect_four/connect4play/c4gameover/colmatch'
-require_relative '../lib/connect_four/connect4play/c4gameover/diagmatch'
-require_relative '../lib/connect_four/connect4play/c4nextstates'
 
 player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
 player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')

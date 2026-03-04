@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module Connect4Game
-  include Constants
-
   # Coordination for the connect 4 game.
   class PlaceTokens
     include Connect4Game::Constants

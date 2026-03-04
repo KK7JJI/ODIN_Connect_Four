@@ -5,7 +5,7 @@ module Connect4Game
   class GamePlay
     include Connect4Game::Constants
     attr_accessor :players, :node_manager, :nextstates, :gameover,
-                  :placetokens
+                  :placetokens, :movetokens
 
     def initialize(game_name: 'generic game',
                    players: nil)
@@ -21,6 +21,9 @@ module Connect4Game
       @placetokens = PlaceTokens.new(node_manager: node_manager,
                                      nextstates: nextstates,
                                      gameover: gameover)
+      @movetokens = MoveTokens.new(node_manager: node_manager,
+                                   nextstates: nextstates,
+                                   gameover: gameover)
     end
 
     def play_round(on_state_change: nil)
@@ -40,7 +43,7 @@ module Connect4Game
     def player_turn(player:)
       puts player.name
       placetokens.place_new_tokens(player: player) if !gameover.game_over? && supports_new_tokens?
-      move_player_tokens(player: player) if !gameover.game_over? && supports_token_movement?
+      movetokens.move_player_tokens(player: player) if !gameover.game_over? && supports_token_movement?
     end
 
     def supports_new_tokens?
@@ -53,21 +56,6 @@ module Connect4Game
 
     def setup_new_game
       self.players = PlayerSetup.new.run_player_setup
-    end
-
-    def move_player_tokens(player:)
-      @token_moves_per_turn.times do
-        player_token_next_states(player)
-        token = player.move_token
-        node_manager.add_node(token: token)
-        break if gameover.game_over?
-      end
-    end
-
-    def player_token_next_states(player)
-      player.tokens.each do |token|
-        token.next_states = nextstates.request_next_states(token)
-      end
     end
 
     def render_gamestate

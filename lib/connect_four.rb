@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 require_relative 'connect_four/app'
 require_relative 'connect_four/constants'
 require_relative 'connect_four/player'

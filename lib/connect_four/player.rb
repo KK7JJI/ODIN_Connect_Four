@@ -4,6 +4,8 @@
 module Connect4Game
   # player parent class
   class Player
+    include Connect4Game::SaveGame
+
     attr_accessor :name, :connect4, :next_states, :tokens, :icon, :input
 
     def initialize(name: 'Player', icon: '', desc: '',

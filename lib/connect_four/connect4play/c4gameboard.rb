@@ -5,11 +5,12 @@ module Connect4Game
   # representation of the connect 4 board used to
   # store current gamestate.
   class C4GameBoard
-    include Constants
+    include Connect4Game::Constants
+    include Connect4Game::SaveGame
 
     attr_accessor :board, :renderer
 
-    def initialize(renderer: nil)
+    def initialize
       @board = Array.new(GAME_COLUMNS) { [] }
     end
 

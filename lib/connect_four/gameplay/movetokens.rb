@@ -4,7 +4,9 @@ module Connect4Game
   # handles change of token state (i.e. movement)
   #
   class MoveTokens
-    include Constants
+    include Connect4Game::Constants
+    include Connect4Game::SaveGame
+
     attr_accessor :node_manager, :gameover, :nextstates, :token_moves_per_turn
 
     def initialize(node_manager: nil, nextstates: nil, gameover: nil)

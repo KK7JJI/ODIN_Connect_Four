@@ -4,6 +4,8 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class GamePlay
     include Connect4Game::Constants
+    include Connect4Game::SaveGame
+
     attr_accessor :players, :node_manager, :nextstates, :gameover,
                   :placetokens, :movetokens
 
@@ -76,6 +78,22 @@ module Connect4Game
 
     def render_gamestate
       @renderer.render(node_manager.last_node)
+    end
+
+    def save_game
+      json_data = to_json
+      fname = player.save_filename
+      f = File.open("#{fname}.hm", 'w')
+      f.puts json_data
+      f.close
+
+      puts 'Save complete, exiting.'
+      exit
+    end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
     end
   end
 end

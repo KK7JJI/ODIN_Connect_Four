@@ -5,6 +5,8 @@ module Connect4Game
   # store current state of the game.
   class Connect4play < GamePlay
     include Connect4Game::Constants
+    include Connect4Game::SaveGame
+
     attr_accessor :connect4_board, :renderer, :gameover, :nextstates
 
     def initialize(name: 'Connect4',

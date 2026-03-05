@@ -7,6 +7,8 @@ module Connect4Game
   # calculate next possibible states given the
   # current token information. Connect 4.
   class C4NextStates
+    include Connect4Game::SaveGame
+
     attr_accessor :connect4_board
 
     def initialize(board: nil)

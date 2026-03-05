@@ -3,6 +3,8 @@
 module Connect4Game
   # end of game logic
   class GameOver
+    include Connect4Game::SaveGame
+
     def game_over?
       raise NotImplementedError, 'game_over? not implemented for general game'
     end

@@ -3,6 +3,8 @@
 module Connect4Game
   # player token locations
   class Connect4TokenState < TokenState
+    include Connect4Game::SaveGame
+
     attr_accessor :id
     attr_reader :row, :col
 

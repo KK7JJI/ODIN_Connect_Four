@@ -4,6 +4,8 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class PlaceTokens
     include Connect4Game::Constants
+    include Connect4Game::SaveGame
+
     attr_accessor :node_manager, :new_tokens_per_turn, :nextstates,
                   :gameover
 

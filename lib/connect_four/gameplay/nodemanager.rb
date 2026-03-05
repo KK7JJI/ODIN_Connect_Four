@@ -3,6 +3,8 @@
 module Connect4Game
   # Coordination for the connect 4 game.
   class NodeManager
+    include Connect4Game::SaveGame
+
     attr_accessor :last_node
     attr_reader :all_nodes, :all_tokens
 

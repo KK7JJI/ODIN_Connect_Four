@@ -4,6 +4,8 @@
 module Connect4Game
   # game play piece
   class Token
+    include Connect4Game::SaveGame
+
     attr_accessor :next_states, :cur_state, :owner, :token_name, :desc
 
     def initialize(token_name: '', owner: nil, desc: '',

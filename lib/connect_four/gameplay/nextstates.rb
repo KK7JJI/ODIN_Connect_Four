@@ -5,6 +5,9 @@
 module Connect4Game
   # calculate possible positions
   class NextStates
+    include Connect4Game::SaveGame
+    include Connect4Game::SaveGame
+
     def request_next_states(token)
       token.next_states = []
     end

@@ -3,6 +3,8 @@
 module Connect4Game
   # code needed to produce ascii display
   class SimplerAsciiRenderer
+    include Connect4Game::SaveGame
+
     attr_reader :last_node
 
     def render(last_node)

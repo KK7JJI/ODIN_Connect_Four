@@ -3,6 +3,8 @@
 module Connect4Game
   # setup connect 4 game players
   class PlayerSetup
+    include Connect4Game::SaveGame
+
     attr_accessor :players
 
     def run_player_setup

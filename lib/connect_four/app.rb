@@ -6,7 +6,8 @@ module Connect4Game
   class App
     def run(args)
       game = Connect4Game::Connect4play.new
-      game.play_round(on_state_change: ->(state) { puts state })
+      game.play_round(on_state_change: ->(state) { puts state },
+                      flush_display: -> { print "\e[2J\e[f" })
     end
   end
 end

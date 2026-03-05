@@ -13,5 +13,14 @@ module Connect4Game
         row.join('').match?(@match)
       end
     end
+
+    def match(gameboard)
+      return nil unless match?(gameboard)
+
+      winning_row = gameboard.select do |row|
+        row.join('').match?(@match)
+      end
+      winning_row.join('').match(@match).to_s
+    end
   end
 end

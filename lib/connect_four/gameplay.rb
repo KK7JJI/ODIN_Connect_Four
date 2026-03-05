@@ -26,22 +26,38 @@ module Connect4Game
                                    gameover: gameover)
     end
 
-    def play_round(on_state_change: nil)
+    def play_round(on_state_change: nil, flush_display: nil)
       setup_new_game
-      on_state_change&.call(render_gamestate)
       until gameover.game_over?
         players.each do |player|
-          player_turn(player: player)
+          player_turn(player: player,
+                      on_state_change: on_state_change,
+                      flush_display: flush_display)
           break if gameover.game_over?
-
-          on_state_change&.call(render_gamestate)
         end
       end
+      clear(flush_display: flush_display)
       on_state_change&.call(render_gamestate)
+      game_winner if gameover.winner?
+      tie_game if gameover.draw?
     end
 
-    def player_turn(player:)
+    def clear(flush_display: nil)
+      flush_display&.call
+    end
+
+    def game_winner
+      gameover.winner
+    end
+
+    def tie_game
+      gameover.draw
+    end
+
+    def player_turn(player:, on_state_change: nil, flush_display: nil)
       puts player.name
+      clear(flush_display: flush_display)
+      on_state_change&.call(render_gamestate)
       placetokens.place_new_tokens(player: player) if !gameover.game_over? && supports_new_tokens?
       movetokens.move_player_tokens(player: player) if !gameover.game_over? && supports_token_movement?
     end

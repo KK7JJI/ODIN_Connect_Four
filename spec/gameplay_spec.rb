@@ -8,6 +8,13 @@ describe Connect4Game::GamePlay do
   player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
   player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')
   players = [player1, player2]
+  let(:gameover) { double(Connect4Game::GameOver) }
+
+  subject(:gp) do
+    described_class.new(
+      players: players
+    )
+  end
 
   def new_token(owner, name)
     Connect4Game::Token.new(
@@ -15,12 +22,6 @@ describe Connect4Game::GamePlay do
       token_name: name,
       desc: 'game piece',
       cur_state: Connect4Game::TokenState.new
-    )
-  end
-
-  subject(:gp) do
-    Connect4Game::GamePlay.new(
-      players: players
     )
   end
 
@@ -37,9 +38,14 @@ describe Connect4Game::GamePlay do
       allow(player2).to receive(:place_token).and_return(token3)
       allow(player2).to receive(:move_token).and_return(token4)
       allow(gp).to receive(:setup_new_game)
+      allow(gp.gameover).to receive(:winner?)
+      allow(gp.gameover).to receive(:winner)
+      allow(gp.gameover).to receive(:game_over?)
+      allow(gp.gameover).to receive(:draw?)
     end
 
     it 'play ends with player2 move' do
+      allow(gp.gameover).to receive(:game_over?)
       allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [true]
       expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
@@ -100,6 +106,10 @@ describe Connect4Game::GamePlay do
       allow(player2).to receive(:place_token).and_return(token3)
       allow(player2).to receive(:move_token).and_return(token4)
       allow(gp).to receive(:setup_new_game)
+      allow(gp.gameover).to receive(:winner?)
+      allow(gp.gameover).to receive(:winner)
+      allow(gp.gameover).to receive(:game_over?)
+      allow(gp.gameover).to receive(:draw?)
     end
 
     it 'printed output is produced' do

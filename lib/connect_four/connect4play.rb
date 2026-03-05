@@ -23,6 +23,14 @@ module Connect4Game
       @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end
 
+    def game_winner
+      puts "#{gameover.winner(players: players)} wins!"
+    end
+
+    def tie_game
+      puts 'Tie game.'
+    end
+
     def add_new_player_tokens(player:)
       Array.new(@new_tokens_per_turn) do
         Token.new(

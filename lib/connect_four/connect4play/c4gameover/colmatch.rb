@@ -26,5 +26,21 @@ module Connect4Game
         row.join('').match?(@match)
       end
     end
+
+    def match(gameboard)
+      gameboard_t = gameboard[0].length.times.map do |i|
+        gameboard.map { |row| row[i] }
+      end
+      row_match(gameboard_t)
+    end
+
+    def row_match(gameboard)
+      return nil unless row_match?(gameboard)
+
+      winning_row = gameboard.select do |row|
+        row.join('').match?(@match)
+      end
+      winning_row.join('').match(@match).to_s
+    end
   end
 end

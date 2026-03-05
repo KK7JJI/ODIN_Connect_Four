@@ -24,6 +24,17 @@ module Connect4Game
       false
     end
 
+    def match(gameboard)
+      self.gameboard = gameboard
+      diag_lines = map_game_tokens_to_diagonals
+      diag_lines = serialize_lines(diag_lines)
+      diag_lines.each do |line|
+        return line.match(@match).to_s if line.match?(@match)
+      end
+
+      nil
+    end
+
     def map_game_tokens_to_diagonals
       diag_lines = []
       all_diag_coords.each do |diag_coords|

@@ -4,16 +4,17 @@ module Connect4Game
   # end of game logic
   class C4GameOver
     include Constants
-    attr_accessor :connect4_board, :row_match, :col_match, :diag_match
+    attr_accessor :connect4_board, :row_matching, :col_matching,
+                  :diag_matching
 
     def initialize(row_match: RowMatch.new,
                    col_match: ColMatch.new,
                    diag_match: DiagMatch.new,
                    board: nil)
       @connect4_board = board
-      @row_match = row_match
-      @col_match = col_match
-      @diag_match = diag_match
+      @row_matching = row_match
+      @col_matching = col_match
+      @diag_matching = diag_match
     end
 
     def winner?
@@ -23,6 +24,18 @@ module Connect4Game
       return true if diagonal_match?(gameboard)
 
       false
+    end
+
+    def winner(players:)
+      return nil unless winner?
+
+      gameboard = connect4_board.xo_array
+      match_str = row_match(gameboard) if row_match?(gameboard)
+      match_str = column_match(gameboard) if column_match?(gameboard)
+      match_str = diagonal_match(gameboard) if diagonal_match?(gameboard)
+      players.each do |player|
+        return player.name if player.icon == match_str.slice(0)
+      end
     end
 
     def game_over?
@@ -40,15 +53,27 @@ module Connect4Game
     end
 
     def row_match?(gameboard)
-      row_match.match?(gameboard)
+      row_matching.match?(gameboard)
+    end
+
+    def row_match(gameboard)
+      row_matching.match(gameboard)
     end
 
     def column_match?(gameboard)
-      col_match.match?(gameboard)
+      col_matching.match?(gameboard)
+    end
+
+    def column_match(gameboard)
+      col_matching.match(gameboard)
     end
 
     def diagonal_match?(gameboard)
-      diag_match.match?(gameboard)
+      diag_matching.match?(gameboard)
+    end
+
+    def diagonal_match(gameboard)
+      diag_matching.match(gameboard)
     end
 
     def full?(gameboard)

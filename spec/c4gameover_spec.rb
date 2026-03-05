@@ -126,7 +126,7 @@ describe Connect4Game::C4GameOver do
 
     context '4 O on diagonals' do
       it 'test diagonals, win' do
-        go.diag_match.all_diag_coords.each do |coords|
+        go.diag_matching.all_diag_coords.each do |coords|
           gameboard = Array.new(6) { Array.new(7) { ' ' } }
           coords.each do |x, y|
             gameboard[x][y] = 'O'
@@ -136,7 +136,7 @@ describe Connect4Game::C4GameOver do
         end
       end
       it 'test diagonals, win' do
-        go.diag_match.all_diag_coords.each do |coords|
+        go.diag_matching.all_diag_coords.each do |coords|
           stones = %w[X O]
           gameboard = Array.new(6) { Array.new(7) { ' ' } }
           coords.each do |x, y|

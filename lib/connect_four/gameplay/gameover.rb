@@ -6,5 +6,17 @@ module Connect4Game
     def game_over?
       raise NotImplementedError, 'game_over? not implemented for general game'
     end
+
+    def winner?
+      raise NotImplementedError, 'game_over? not implemented for general game'
+    end
+
+    def winner
+      raise NotImplementedError, 'game_over not implemented for general game'
+    end
+
+    def draw?
+      raise NotImplementedError, 'draw not implemeneted for general game'
+    end
   end
 end

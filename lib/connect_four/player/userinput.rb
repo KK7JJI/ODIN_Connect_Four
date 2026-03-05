@@ -6,7 +6,7 @@ module Connect4Game
     include Connect4Game::SaveGame
 
     def get
-      $stdin.gets.chomp
+      $stdin.getch
     end
   end
 end

@@ -25,13 +25,14 @@ module Connect4Game
 
     def user_input
       puts "Open columns are: #{next_states.join(', ')}"
-      print 'Select column: '
+      print 'Select column (^s to save game): '
       val = input.get
       until valid_selection?(val)
         puts "Invalid selection, #{val}"
         puts 'Column is full' if columns.include?(val)
         print 'Try again: '
         val = input.get
+        throw :savegame if val == "\u0013" # ^s
       end
       val.to_i
     end
@@ -42,7 +43,7 @@ module Connect4Game
 
       until valid_filename?(fname)
         puts 'Invalid filename, try again.'
-        fname = $stdin.gets.chomp
+        fname = $stdin.get.chomp
       end
       fname
     end

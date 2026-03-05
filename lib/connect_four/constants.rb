@@ -6,6 +6,7 @@ module Connect4Game
   module Constants
     # ROWS here = COLS in the connect 4 print out.
     # COLS here = ROWS in the connect 4 print out.
+    CLS = "\e[2J\e[f" # puts CLS clears the screen.
     GAME_COLUMNS = 7
     GAME_ROWS = 6
     BASE_NEW_TOKENS_PER_TURN = 1

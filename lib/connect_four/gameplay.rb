@@ -30,18 +30,23 @@ module Connect4Game
 
     def play_round(on_state_change: nil, flush_display: nil)
       setup_new_game
-      until gameover.game_over?
-        players.each do |player|
-          player_turn(player: player,
-                      on_state_change: on_state_change,
-                      flush_display: flush_display)
-          break if gameover.game_over?
+
+      catch(:savegame) do
+        until gameover.game_over?
+          players.each do |player|
+            player_turn(player: player,
+                        on_state_change: on_state_change,
+                        flush_display: flush_display)
+            break if gameover.game_over?
+          end
         end
       end
+
       clear(flush_display: flush_display)
       on_state_change&.call(render_gamestate)
       game_winner if gameover.winner?
       tie_game if gameover.draw?
+      save_game unless gameover.game_over?
     end
 
     def clear(flush_display: nil)
@@ -81,6 +86,9 @@ module Connect4Game
     end
 
     def save_game
+      puts 'save game'
+      return nil if true
+
       json_data = to_json
       fname = player.save_filename
       f = File.open("#{fname}.hm", 'w')

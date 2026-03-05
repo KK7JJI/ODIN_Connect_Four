@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Hangman
+module Connect4Game
   # identify and select savegame files
   module LoadGame
     def select_save_file

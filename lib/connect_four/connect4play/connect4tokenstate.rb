@@ -25,5 +25,10 @@ module Connect4Game
       @col = value
       @id = [@row, value].inspect
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

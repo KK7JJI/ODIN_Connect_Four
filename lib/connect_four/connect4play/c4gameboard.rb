@@ -40,6 +40,11 @@ module Connect4Game
       board.all?(&:empty?)
     end
 
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
+
     private
 
     def transpose(arr, fill: ' ')

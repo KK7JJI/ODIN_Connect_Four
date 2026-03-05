@@ -20,5 +20,10 @@ module Connect4Game
         Connect4Game::Connect4TokenState.new(col: col)
       end
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

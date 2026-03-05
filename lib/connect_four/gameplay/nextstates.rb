@@ -11,5 +11,10 @@ module Connect4Game
     def request_next_states(token)
       token.next_states = []
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

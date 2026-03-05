@@ -10,5 +10,10 @@ module Connect4Game
       @parent = parent
       @token = token
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

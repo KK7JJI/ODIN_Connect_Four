@@ -20,5 +20,10 @@ module Connect4Game
     def draw?
       raise NotImplementedError, 'draw not implemeneted for general game'
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

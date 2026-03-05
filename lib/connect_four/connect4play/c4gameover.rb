@@ -85,5 +85,10 @@ module Connect4Game
     def empty?(gameboard)
       gameboard.flatten.all? { |elem| elem == ' ' }
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

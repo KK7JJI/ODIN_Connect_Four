@@ -29,6 +29,11 @@ module Connect4Game
       traverse_nodes(node).map(&:token)
     end
 
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
+
     private
 
     def traverse_nodes(node)

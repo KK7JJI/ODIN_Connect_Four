@@ -48,5 +48,10 @@ module Connect4Game
     def render_gamestate
       renderer.return_board_with_borders
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

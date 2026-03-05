@@ -24,5 +24,10 @@ module Connect4Game
 
       tokens.reverse
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

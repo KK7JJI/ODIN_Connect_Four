@@ -46,5 +46,10 @@ module Connect4Game
       connect4_board.update_board(token)
       token
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

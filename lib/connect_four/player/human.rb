@@ -37,5 +37,10 @@ module Connect4Game
       end
       val.to_i
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

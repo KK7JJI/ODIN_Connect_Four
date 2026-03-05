@@ -8,5 +8,10 @@ module Connect4Game
     def initialize(desc: '')
       @desc = desc
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

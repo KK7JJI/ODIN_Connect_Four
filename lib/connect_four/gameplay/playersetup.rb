@@ -40,5 +40,10 @@ module Connect4Game
       end
       player_option
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

@@ -17,5 +17,10 @@ module Connect4Game
       @cur_state = cur_state
       @next_states = next_states
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

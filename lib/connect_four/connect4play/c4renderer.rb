@@ -27,6 +27,11 @@ module Connect4Game
       requested_state_rep(response: response)
     end
 
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
+
     private
 
     def requested_state_rep(response:)

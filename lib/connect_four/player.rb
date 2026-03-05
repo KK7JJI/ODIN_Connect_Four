@@ -35,5 +35,10 @@ module Connect4Game
     def move_token
       raise NotImplementedError, 'Player, move_token requires player/game specific subclass'
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

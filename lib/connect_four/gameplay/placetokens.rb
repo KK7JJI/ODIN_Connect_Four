@@ -40,5 +40,10 @@ module Connect4Game
     def place_token(player:, token:)
       player.place_token(token)
     end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
   end
 end

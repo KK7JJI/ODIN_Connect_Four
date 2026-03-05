@@ -4,6 +4,8 @@ module Connect4Game
   # rules for matching 4 in a row
   # by row on the gameboard
   class DiagMatch
+    include Connect4Game::SaveGame
+
     attr_accessor :all_diag_coords, :gameboard
 
     def initialize
@@ -102,6 +104,11 @@ module Connect4Game
         end
       end
       results
+    end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
     end
   end
 end

@@ -86,17 +86,32 @@ module Connect4Game
     end
 
     def save_game
-      puts 'save game'
-      return nil if true
-
+      puts 'Saving game .....'
       json_data = to_json
-      fname = player.save_filename
-      f = File.open("#{fname}.hm", 'w')
+      fname = save_filename
+      f = File.open("#{fname}.c4", 'w')
       f.puts json_data
       f.close
 
       puts 'Save complete, exiting.'
       exit
+    end
+
+    def save_filename
+      print("\nEnter Filename: ")
+      fname = $stdin.gets.chomp
+
+      until valid_filename?(fname)
+        puts 'Invalid filename, try again.'
+        fname = $stdin.gets.chomp
+      end
+      fname
+    end
+
+    def valid_filename?(filename)
+      return true if filename =~ /\A[A-Za-z][0-9A-Za-z._-]+\z/
+
+      false
     end
 
     def self.json_create(hash)

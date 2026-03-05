@@ -9,12 +9,14 @@ module Connect4Game
 
     def run_player_setup
       players = []
+      id = 0
       [['Player 1', 'X'], ['Player 2', 'O']].each do |player_name, icon|
+        id += 1
         name = choose_player_name(default: player_name)
         player_type_option = config_player_type(player_name: player_name)
 
-        players << Human.new(name: name, icon: icon) if player_type_option == 1
-        players << Random.new(name: name, icon: icon) if player_type_option == 2
+        players << Human.new(name: name, icon: icon, id: id) if player_type_option == 1
+        players << Random.new(name: name, icon: icon, id: id) if player_type_option == 2
       end
 
       players

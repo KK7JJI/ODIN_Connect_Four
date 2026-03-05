@@ -14,6 +14,12 @@ describe Connect4Game::C4GameBoard do
     gb.renderer.connect4_board = gb
   end
 
+  def print_board(xo_array)
+    xo_array.each do |row|
+      puts row.inspect
+    end
+  end
+
   describe '#update_board' do
     it 'add a token to a specific game column' do
       token = Connect4Game::Token.new
@@ -75,8 +81,8 @@ describe Connect4Game::C4GameBoard do
     end
   end
   describe '#return_xo_array' do
-    let(:player1) { Connect4Game::Human.new(name: 'Player 1', icon: 'X') }
-    let(:player2) { Connect4Game::Human.new(name: 'Player 2', icon: 'O') }
+    let(:player1) { Connect4Game::Human.new(id: 1, name: 'Player 1', icon: 'X') }
+    let(:player2) { Connect4Game::Human.new(id: 2, name: 'Player 2', icon: 'O') }
     it 'empty gameboard' do
       result = gb.xo_array
       expect(result.flatten.all? { |elem| elem == ' ' }).to eql(true)
@@ -84,7 +90,7 @@ describe Connect4Game::C4GameBoard do
       expect(result.all? { |row| row.is_a?(Array) })
     end
     it 'one token on column 0' do
-      token = Connect4Game::Token.new(owner: player1)
+      token = Connect4Game::Token.new(player_id: player1.id, icon: player1.icon)
       token.cur_state = Connect4Game::Connect4TokenState.new(col: 0)
       gb.update_board(token)
       result = gb.xo_array
@@ -100,7 +106,9 @@ describe Connect4Game::C4GameBoard do
         (0...6).each do |row|
           cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
           gb.update_board(
-            Connect4Game::Token.new(owner: player1, cur_state: cur_state)
+            Connect4Game::Token.new(player_id: player1.id,
+                                    icon: player1.icon,
+                                    cur_state: cur_state)
           )
         end
         result = gb.xo_array
@@ -109,13 +117,15 @@ describe Connect4Game::C4GameBoard do
       expect(result.is_a?(Array)).to eql(true)
       expect(result.all? { |row| row.is_a?(Array) })
     end
-    it 'fill columns one at a time Xs' do
+    it 'fill columns one at a time Os' do
       result = ''
       (0...7).each do |col|
         (0...6).each do |row|
           cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
           gb.update_board(
-            Connect4Game::Token.new(owner: player2, cur_state: cur_state)
+            Connect4Game::Token.new(player_id: player2.id,
+                                    icon: player2.icon,
+                                    cur_state: cur_state)
           )
         end
         result = gb.xo_array

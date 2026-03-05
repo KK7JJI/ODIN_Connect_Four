@@ -8,7 +8,7 @@ module Connect4Game
 
     attr_reader :columns
 
-    def initialize(name: 'Player', icon: '', desc: '',
+    def initialize(name: 'Player', id: 0, icon: '', desc: '',
                    input: UserInput.new)
       super
       @columns = (0...Constants::GAME_COLUMNS).to_a.map(&:to_s)
@@ -25,33 +25,17 @@ module Connect4Game
 
     def user_input
       puts "Open columns are: #{next_states.join(', ')}"
-      print 'Select column (^s to save game): '
+      print 'Select column ("s" to save game): '
       val = input.get
+      throw :savegame if val == 's'
       until valid_selection?(val)
         puts "Invalid selection, #{val}"
         puts 'Column is full' if columns.include?(val)
         print 'Try again: '
         val = input.get
-        throw :savegame if val == "\u0013" # ^s
+        throw :savegame if val == 's'
       end
       val.to_i
-    end
-
-    def save_filename
-      print("\nEnter Filename: ")
-      fname = $stdin.gets.chomp
-
-      until valid_filename?(fname)
-        puts 'Invalid filename, try again.'
-        fname = $stdin.get.chomp
-      end
-      fname
-    end
-
-    def valid_filename?(filename)
-      return true if filename =~ /\A[A-Za-z][0-9A-Za-z._-]+\z/
-
-      false
     end
   end
 end

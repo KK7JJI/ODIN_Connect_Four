@@ -30,7 +30,9 @@ describe Connect4Game::C4Renderer do
         (0...6).each do |row|
           cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
           c4render.connect4_board.update_board(
-            Connect4Game::Token.new(owner: player1, cur_state: cur_state)
+            Connect4Game::Token.new(player_id: player1.id,
+                                    icon: player1.icon,
+                                    cur_state: cur_state)
           )
         end
         result = c4render.return_board_with_borders
@@ -46,7 +48,9 @@ describe Connect4Game::C4Renderer do
         (0...6).each do |row|
           cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
           c4render.connect4_board.update_board(
-            Connect4Game::Token.new(owner: player2, cur_state: cur_state)
+            Connect4Game::Token.new(player_id: player2.id,
+                                    icon: player2.icon,
+                                    cur_state: cur_state)
           )
         end
         result = c4render.return_board_with_borders
@@ -70,7 +74,9 @@ describe Connect4Game::C4Renderer do
         (0...6).each do |row|
           cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
           c4render.connect4_board.update_board(
-            Connect4Game::Token.new(owner: player1, cur_state: cur_state)
+            Connect4Game::Token.new(player_id: player1.id,
+                                    icon: player1.icon,
+                                    cur_state: cur_state)
           )
         end
         result = c4render.return_board_without_borders
@@ -86,7 +92,9 @@ describe Connect4Game::C4Renderer do
         (0...6).each do |row|
           cur_state = Connect4Game::Connect4TokenState.new(col: col, row: row)
           c4render.connect4_board.update_board(
-            Connect4Game::Token.new(owner: player2, cur_state: cur_state)
+            Connect4Game::Token.new(player_id: player2.id,
+                                    icon: player2.icon,
+                                    cur_state: cur_state)
           )
         end
         result = c4render.return_board_without_borders

@@ -22,9 +22,21 @@ describe Connect4Game::Connect4play do
     let(:token2state) { Connect4Game::Connect4TokenState.new(row: 1, col: 1) }
     let(:token3state) { Connect4Game::Connect4TokenState.new(row: 0, col: 2) }
 
-    let(:token1) { Connect4Game::Token.new(owner: player1, cur_state: token1state) }
-    let(:token2) { Connect4Game::Token.new(owner: player1, cur_state: token2state) }
-    let(:token3) { Connect4Game::Token.new(owner: player1, cur_state: token3state) }
+    let(:token1) do
+      Connect4Game::Token.new(player_id: player1.id,
+                              icon: player1.icon,
+                              cur_state: token1state)
+    end
+    let(:token2) do
+      Connect4Game::Token.new(player_id: player1.id,
+                              icon: player1.icon,
+                              cur_state: token2state)
+    end
+    let(:token3) do
+      Connect4Game::Token.new(player_id: player1.id,
+                              icon: player1.icon,
+                              cur_state: token3state)
+    end
 
     before do
       allow(c4p).to receive(:setup_new_game)
@@ -51,7 +63,9 @@ describe Connect4Game::Connect4play do
     it 'fill one entire row.' do
       (0...6).each do |i|
         token_state = Connect4Game::Connect4TokenState.new(row: i, col: 0)
-        token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
+        token = Connect4Game::Token.new(player_id: player2,
+                                        icon: player2.icon,
+                                        cur_state: token_state)
         c4p.connect4_board.update_board(token)
       end
       expect(c4p.render_gamestate.count('O')).to eql(6)
@@ -61,7 +75,9 @@ describe Connect4Game::Connect4play do
       (0...7).each do |j|
         (0...6).each do |i|
           token_state = Connect4Game::Connect4TokenState.new(row: i, col: j)
-          token = Connect4Game::Token.new(owner: player2, cur_state: token_state)
+          token = Connect4Game::Token.new(player_id: player2,
+                                          icon: player2.icon,
+                                          cur_state: token_state)
           c4p.connect4_board.update_board(token)
         end
         expect(c4p.render_gamestate.count('O')).to eql(6 * (j + 1))

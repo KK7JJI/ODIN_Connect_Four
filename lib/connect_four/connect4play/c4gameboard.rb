@@ -24,7 +24,7 @@ module Connect4Game
     def xo_array
       # player 1: X, player 2: O
       transpose(board.map do |row|
-        row.map { |token| token.owner.icon }
+        row.map { |token| token.icon }
       end)
     end
 

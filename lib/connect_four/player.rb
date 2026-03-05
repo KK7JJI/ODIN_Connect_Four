@@ -6,9 +6,9 @@ module Connect4Game
   class Player
     include Connect4Game::SaveGame
 
-    attr_accessor :name, :connect4, :next_states, :tokens, :icon, :input
+    attr_accessor :name, :connect4, :next_states, :tokens, :icon, :input, :id
 
-    def initialize(name: 'Player', icon: '', desc: '',
+    def initialize(name: 'Player', icon: '', desc: '', id: nil,
                    input: UserInput.new)
       @name = name
       @desc = desc
@@ -17,6 +17,7 @@ module Connect4Game
 
       @next_states = []
       @tokens = []
+      @id = id
     end
 
     def valid_selection?(val)

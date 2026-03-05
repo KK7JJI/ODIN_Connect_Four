@@ -34,7 +34,8 @@ module Connect4Game
     def new_player_tokens(player:)
       Array.new(new_tokens_per_turn) do
         Token.new(token_name: 'stone',
-                  owner: player,
+                  player_id: player.id,
+                  icon: player.icon,
                   cur_state: Connect4TokenState.new,
                   desc: 'game piece')
       end

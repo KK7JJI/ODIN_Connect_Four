@@ -8,7 +8,13 @@ module Connect4Game
     include Connect4Game::LoadGame
 
     def run(args)
-      game = Connect4Game::Connect4play.new
+      fname = select_save_file
+      if fname.empty?
+        game = Connect4Game::Connect4play.new
+      else
+        game = JSON.load(File.read(fname))
+        delete_save_file(fname)
+      end
       game.play_round(on_state_change: ->(state) { puts state },
                       flush_display: -> { print CLS })
     end

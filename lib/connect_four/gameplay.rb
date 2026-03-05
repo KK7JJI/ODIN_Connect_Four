@@ -15,7 +15,7 @@ module Connect4Game
       @players = players || []
       @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
       @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
-
+      @my_turn = nil
       @node_manager = NodeManager.new
       @renderer = SimplerAsciiRenderer.new
       @gameover = GameOver.new
@@ -29,15 +29,20 @@ module Connect4Game
     end
 
     def play_round(on_state_change: nil, flush_display: nil)
-      setup_new_game
+      setup_new_game if players.empty?
 
       catch(:savegame) do
         until gameover.game_over?
           players.each do |player|
+            @my_turn = player.id if @my_turn.nil?
+            next if @my_turn != player.id
+
             player_turn(player: player,
                         on_state_change: on_state_change,
                         flush_display: flush_display)
             break if gameover.game_over?
+
+            @my_turn = nil
           end
         end
       end

@@ -8,7 +8,7 @@ describe Connect4Game::GamePlay do
   player1 = Connect4Game::Human.new(name: 'Player 1', icon: 'X')
   player2 = Connect4Game::Human.new(name: 'Player 2', icon: 'O')
   players = [player1, player2]
-  let(:gameover) { double(Connect4Game::GameOver) }
+  let(:gameover) { Connect4Game::GameOver.new }
 
   subject(:gp) do
     described_class.new(
@@ -39,23 +39,22 @@ describe Connect4Game::GamePlay do
       allow(player2).to receive(:place_token).and_return(token3)
       allow(player2).to receive(:move_token).and_return(token4)
       allow(gp).to receive(:setup_new_game)
+      allow(gp).to receive(:reinitialize)
+      allow(gp.gameover).to receive(:game_over?)
       allow(gp.gameover).to receive(:winner?)
       allow(gp.gameover).to receive(:winner)
-      allow(gp.gameover).to receive(:game_over?)
       allow(gp.gameover).to receive(:draw?)
+      allow(gp.nextstates).to receive(:request_next_states).and_return([])
     end
 
     it 'play ends with player2 move' do
-      allow(gp.gameover).to receive(:game_over?)
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [true] + [true]
-      expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
+      allow(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
       expect(gp.node_manager.last_node.token).to eql(token4)
     end
 
     it 'play ends with player1 first placed_token' do
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] * 2 + [true] * 3 + [true] + [true]
       expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -63,7 +62,6 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player1 first move_token' do
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] * 4 + [true] * 2 + [true] + [true]
       expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -71,7 +69,6 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player2 first place_token' do
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] + [true] * 4 + [true]
       expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -79,7 +76,6 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player2 first move_token' do
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 3 + [true] * 3 + [true]
       expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -87,7 +83,6 @@ describe Connect4Game::GamePlay do
     end
 
     it 'play ends with player1 second place_token' do
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [false] + [false] + [true] * 5
       expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
@@ -107,6 +102,7 @@ describe Connect4Game::GamePlay do
       allow(player2).to receive(:place_token).and_return(token3)
       allow(player2).to receive(:move_token).and_return(token4)
       allow(gp).to receive(:setup_new_game)
+      allow(gp).to receive(:reinitialize)
       allow(gp.gameover).to receive(:winner?)
       allow(gp.gameover).to receive(:winner)
       allow(gp.gameover).to receive(:game_over?)
@@ -114,9 +110,8 @@ describe Connect4Game::GamePlay do
     end
 
     it 'printed output is produced' do
-      allow(gp.nextstates).to receive(:request_next_states).and_return([])
       sequence = [false] + [false] * 5 + [false] * 5 + [false] + [false] + [true] * 5
-      expect(gp.gameover).to receive(:game_over?).and_return(*sequence)
+      allow(gp.gameover).to receive(:game_over?).and_return(*sequence)
       gp.play_round(on_state_change: ->(gamestate) { gamestate })
       expect(gp.render_gamestate).to eql(
         %w[stone1 stone2 stone3 stone4 stone5]

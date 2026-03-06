@@ -32,7 +32,6 @@ module Connect4Game
       if players.empty?
         setup_new_game
       else
-        puts 'running reloader'
         reinitialize
       end
 

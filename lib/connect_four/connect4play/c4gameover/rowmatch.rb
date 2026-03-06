@@ -4,8 +4,6 @@ module Connect4Game
   # rules for matching 4 in a row
   # by row on the gameboard
   class RowMatch
-    include Connect4Game::SaveGame
-
     def initialize
       @match = /X{4}|O{4}/
     end
@@ -23,11 +21,6 @@ module Connect4Game
         row.join('').match?(@match)
       end
       winning_row.join('').match(@match).to_s
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

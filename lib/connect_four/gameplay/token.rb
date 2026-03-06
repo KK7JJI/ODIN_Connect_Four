@@ -6,7 +6,8 @@ module Connect4Game
   class Token
     include Connect4Game::SaveGame
 
-    attr_accessor :next_states, :cur_state, :player_id, :token_name, :desc, :icon
+    attr_accessor :next_states, :cur_state, :player_id, :token_name,
+                  :desc, :icon
 
     def initialize(token_name: '', player_id: nil, desc: '', icon: '',
                    cur_state: nil, next_states: [])

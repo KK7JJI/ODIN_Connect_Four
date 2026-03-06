@@ -4,7 +4,6 @@ module Connect4Game
   # Coordination for the connect 4 game.
   class C4PlaceTokens
     include Connect4Game::Constants
-    include Connect4Game::SaveGame
 
     attr_accessor :node_manager, :new_tokens_per_turn, :nextstates,
                   :connect4_board, :gameover
@@ -45,11 +44,6 @@ module Connect4Game
       token = player.place_token(token)
       connect4_board.update_board(token)
       token
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

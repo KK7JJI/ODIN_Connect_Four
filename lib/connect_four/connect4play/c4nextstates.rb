@@ -7,8 +7,6 @@ module Connect4Game
   # calculate next possibible states given the
   # current token information. Connect 4.
   class C4NextStates
-    include Connect4Game::SaveGame
-
     attr_accessor :connect4_board
 
     def initialize(board: nil)
@@ -19,11 +17,6 @@ module Connect4Game
       token.next_states = connect4_board.open_columns.map do |col|
         Connect4Game::Connect4TokenState.new(col: col)
       end
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

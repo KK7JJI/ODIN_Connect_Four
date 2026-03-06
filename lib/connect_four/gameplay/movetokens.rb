@@ -5,7 +5,6 @@ module Connect4Game
   #
   class MoveTokens
     include Connect4Game::Constants
-    include Connect4Game::SaveGame
 
     attr_accessor :node_manager, :gameover, :nextstates, :token_moves_per_turn
 
@@ -29,11 +28,6 @@ module Connect4Game
       player.tokens.each do |token|
         token.next_states = nextstates.request_next_states(token)
       end
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

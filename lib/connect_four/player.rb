@@ -14,10 +14,13 @@ module Connect4Game
       @desc = desc
       @icon = icon
       @input = input
-
       @next_states = []
       @tokens = []
       @id = id
+    end
+
+    def reinitialize(input: UserInput.new)
+      @input = input
     end
 
     def valid_selection?(val)

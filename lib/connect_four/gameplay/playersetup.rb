@@ -3,8 +3,6 @@
 module Connect4Game
   # setup connect 4 game players
   class PlayerSetup
-    include Connect4Game::SaveGame
-
     attr_accessor :players
 
     def run_player_setup
@@ -39,11 +37,6 @@ module Connect4Game
         player_option = default if player_option.zero?
       end
       player_option
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

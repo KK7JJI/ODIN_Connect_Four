@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'debug'
 require 'json'
 require 'io/console'
 require_relative 'connect_four/save_game'

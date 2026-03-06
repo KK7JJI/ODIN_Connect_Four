@@ -10,13 +10,13 @@ module Connect4Game
                   :placetokens, :movetokens
 
     def initialize(game_name: 'generic game',
-                   players: nil)
-      @game_name = game_name
-      @players = players || []
-      @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN
-      @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN
-      @my_turn = nil
-      @node_manager = NodeManager.new
+                   players: nil, reloader: false)
+      @game_name = game_name unless reloader
+      @new_tokens_per_turn = BASE_NEW_TOKENS_PER_TURN unless reloader
+      @token_moves_per_turn = BASE_TOKEN_MOVES_PER_TURN unless reloader
+      @my_turn = nil unless reloader
+      @players = players || [] unless reloader
+      @node_manager = NodeManager.new unless reloader
       @renderer = SimplerAsciiRenderer.new
       @gameover = GameOver.new
       @nextstates = NextStates.new
@@ -29,7 +29,12 @@ module Connect4Game
     end
 
     def play_round(on_state_change: nil, flush_display: nil)
-      setup_new_game if players.empty?
+      if players.empty?
+        setup_new_game
+      else
+        puts 'running reloader'
+        reinitialize
+      end
 
       catch(:savegame) do
         until gameover.game_over?
@@ -67,7 +72,6 @@ module Connect4Game
     end
 
     def player_turn(player:, on_state_change: nil, flush_display: nil)
-      puts player.name
       clear(flush_display: flush_display)
       on_state_change&.call(render_gamestate)
       placetokens.place_new_tokens(player: player) if !gameover.game_over? && supports_new_tokens?
@@ -84,6 +88,12 @@ module Connect4Game
 
     def setup_new_game
       self.players = PlayerSetup.new.run_player_setup
+    end
+
+    def reinitialize
+      puts __method__
+      initialize(reloader: true)
+      players.each(&:reinitialize)
     end
 
     def render_gamestate

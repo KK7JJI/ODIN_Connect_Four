@@ -4,7 +4,6 @@ module Connect4Game
   # generate an ascii representation of the gamestate
   class C4Renderer
     include Connect4Game::Constants
-    include Connect4Game::SaveGame
 
     attr_accessor :connect4_board, :rendered_board, :rendered_board_nb, :xo_array
 
@@ -25,11 +24,6 @@ module Connect4Game
 
     def return_board_without_borders(response: -> { rendered_board_nb })
       requested_state_rep(response: response)
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
 
     private

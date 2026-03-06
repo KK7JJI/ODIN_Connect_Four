@@ -4,15 +4,14 @@
 module Connect4Game
   # store current state of the game.
   class Connect4play < GamePlay
-    include Connect4Game::Constants
-    include Connect4Game::SaveGame
-
     attr_accessor :connect4_board, :renderer, :gameover, :nextstates
 
     def initialize(name: 'Connect4',
-                   players: nil)
-      super(game_name: name, players: players)
-      @connect4_board = Connect4Game::C4GameBoard.new
+                   players: nil, reloader: false)
+      super(game_name: name, players: players, reloader: reloader)
+      @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN unless reloader
+      @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN unless reloader
+      @connect4_board = Connect4Game::C4GameBoard.new unless reloader
       @renderer = Connect4Game::C4Renderer.new(board: connect4_board)
       @gameover = Connect4Game::C4GameOver.new(board: connect4_board)
       @nextstates = Connect4Game::C4NextStates.new(board: connect4_board)
@@ -20,9 +19,6 @@ module Connect4Game
                                        nextstates: nextstates,
                                        gameover: gameover,
                                        board: connect4_board)
-
-      @new_tokens_per_turn = C4_NEW_TOKENS_PER_TURN
-      @token_moves_per_turn = C4_TOKEN_MOVES_PER_TURN
     end
 
     def game_winner
@@ -31,6 +27,10 @@ module Connect4Game
 
     def tie_game
       puts 'Tie game.'
+    end
+
+    def reloader
+      initialize(reloader: true)
     end
 
     def add_new_player_tokens(player:)
@@ -47,11 +47,6 @@ module Connect4Game
 
     def render_gamestate
       renderer.return_board_with_borders
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

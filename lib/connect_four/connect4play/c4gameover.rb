@@ -4,7 +4,6 @@ module Connect4Game
   # end of game logic
   class C4GameOver
     include Connect4Game::Constants
-    include Connect4Game::SaveGame
 
     attr_accessor :connect4_board, :row_matching, :col_matching,
                   :diag_matching
@@ -84,11 +83,6 @@ module Connect4Game
 
     def empty?(gameboard)
       gameboard.flatten.all? { |elem| elem == ' ' }
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

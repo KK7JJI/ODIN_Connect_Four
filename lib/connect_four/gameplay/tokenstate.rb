@@ -3,15 +3,8 @@
 module Connect4Game
   # describes the token's state (i.e. location) in the current game.
   class TokenState
-    include Connect4Game::SaveGame
-
     def initialize(desc: '')
       @desc = desc
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

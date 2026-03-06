@@ -12,7 +12,6 @@ module Connect4Game
     end
 
     def to_json(*a)
-      puts self.class
       {
         'json_class' => self.class.name,
         'data' => attributes

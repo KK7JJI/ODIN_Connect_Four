@@ -3,8 +3,6 @@
 module Connect4Game
   # code needed to produce ascii display
   class SimplerAsciiRenderer
-    include Connect4Game::SaveGame
-
     attr_reader :last_node
 
     def render(last_node)
@@ -23,11 +21,6 @@ module Connect4Game
       end
 
       tokens.reverse
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

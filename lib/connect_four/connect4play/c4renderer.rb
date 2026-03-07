@@ -4,6 +4,7 @@ module Connect4Game
   # generate an ascii representation of the gamestate
   class C4Renderer
     include Connect4Game::Constants
+    include Connect4Game::C4Constants
 
     attr_accessor :connect4_board, :rendered_board, :rendered_board_nb, :xo_array
 

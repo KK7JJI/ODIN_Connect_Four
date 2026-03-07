@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require_relative '../lib/connect_four/constants'
+require_relative '../lib/connect_four/c4constants'
 require_relative '../lib/connect_four/gameplay/tokenstate'
 require_relative '../lib/connect_four/connect4play/connect4tokenstate'
 

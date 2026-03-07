@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/connect_four/constants'
+require_relative '../lib/connect_four/c4constants'
 require_relative '../lib/connect_four/connect4play/c4renderer'
 
 describe Connect4Game::C4Renderer do
@@ -21,7 +22,7 @@ describe Connect4Game::C4Renderer do
     it 'empty gameboard' do
       result = c4render.return_board_with_borders
       expect(result.count(' ')).to eql(6 * 7)
-      expect(result.count(Connect4Game::Constants::BOX_CHARS[:vert_line])).to eql(6 * 7 + 6)
+      expect(result.count(Connect4Game::C4Constants::BOX_CHARS[:vert_line])).to eql(6 * 7 + 6)
       expect(result.is_a?(String)).to eql(true)
     end
     it 'fill columns one at a time Xs' do
@@ -37,7 +38,7 @@ describe Connect4Game::C4Renderer do
         end
         result = c4render.return_board_with_borders
         expect(result.count('X')).to eql((col + 1) * 6)
-        expect(result.count(Connect4Game::Constants::BOX_CHARS[:vert_line])).to eql(6 * 7 + 6)
+        expect(result.count(Connect4Game::C4Constants::BOX_CHARS[:vert_line])).to eql(6 * 7 + 6)
         expect(result.is_a?(String)).to eql(true)
       end
     end
@@ -55,7 +56,7 @@ describe Connect4Game::C4Renderer do
         end
         result = c4render.return_board_with_borders
         expect(result.count('O')).to eql((col + 1) * 6)
-        expect(result.count(Connect4Game::Constants::BOX_CHARS[:vert_line])).to eql(6 * 7 + 6)
+        expect(result.count(Connect4Game::C4Constants::BOX_CHARS[:vert_line])).to eql(6 * 7 + 6)
         expect(result.is_a?(String)).to eql(true)
       end
     end
@@ -65,7 +66,7 @@ describe Connect4Game::C4Renderer do
     it 'empty gameboard' do
       result = c4render.return_board_without_borders
       expect(result.count(' ')).to eql(6 * 7)
-      expect(result.count(Connect4Game::Constants::BOX_CHARS[:vert_line])).to eql(0)
+      expect(result.count(Connect4Game::C4Constants::BOX_CHARS[:vert_line])).to eql(0)
       expect(result.is_a?(String)).to eql(true)
     end
     it 'fill columns one at a time Xs' do
@@ -81,7 +82,7 @@ describe Connect4Game::C4Renderer do
         end
         result = c4render.return_board_without_borders
         expect(result.count('X')).to eql((col + 1) * 6)
-        expect(result.count(Connect4Game::Constants::BOX_CHARS[:vert_line])).to eql(0)
+        expect(result.count(Connect4Game::C4Constants::BOX_CHARS[:vert_line])).to eql(0)
         expect(result.is_a?(String)).to eql(true)
       end
     end
@@ -99,7 +100,7 @@ describe Connect4Game::C4Renderer do
         end
         result = c4render.return_board_without_borders
         expect(result.count('O')).to eql((col + 1) * 6)
-        expect(result.count(Connect4Game::Constants::BOX_CHARS[:vert_line])).to eql(0)
+        expect(result.count(Connect4Game::C4Constants::BOX_CHARS[:vert_line])).to eql(0)
         expect(result.is_a?(String)).to eql(true)
       end
     end

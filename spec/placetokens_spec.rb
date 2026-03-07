@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require_relative '../lib/connect_four/constants'
+require_relative '../lib/connect_four/c4constants'
 require_relative '../lib/connect_four/gameplay/placetokens'
 
 describe Connect4Game::PlaceTokens do

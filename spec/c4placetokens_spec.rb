@@ -1,4 +1,5 @@
 require_relative '../lib/connect_four/constants'
+require_relative '../lib/connect_four/c4constants'
 require_relative '../lib/connect_four/connect4play/c4placetokens'
 require_relative '../lib/connect_four/gameplay/gameover'
 require_relative '../lib/connect_four/connect4play/c4gameover'

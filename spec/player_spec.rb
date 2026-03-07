@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/connect_four/constants'
+require_relative '../lib/connect_four/c4constants'
 
 describe Connect4Game::Player do # rubocop:disable Metrics/BlockLength
   let(:next_positions) { [0, 1, 2, 4, 5, 6] }

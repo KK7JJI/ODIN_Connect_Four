@@ -4,13 +4,14 @@ module Connect4Game
   # human player
   class Human < Player
     include Connect4Game::Constants
+    include Connect4Game::C4Constants
 
     attr_reader :columns
 
     def initialize(name: 'Player', id: 0, icon: '', desc: '',
                    input: UserInput.new)
       super
-      @columns = (0...Constants::GAME_COLUMNS).to_a.map(&:to_s)
+      @columns = (0...C4Constants::GAME_COLUMNS).to_a.map(&:to_s)
     end
 
     def place_token(token)

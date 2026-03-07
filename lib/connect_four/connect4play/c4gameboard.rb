@@ -6,6 +6,7 @@ module Connect4Game
   # store current gamestate.
   class C4GameBoard
     include Connect4Game::Constants
+    include Connect4Game::C4Constants
     include Connect4Game::SaveGame
 
     attr_accessor :board, :renderer

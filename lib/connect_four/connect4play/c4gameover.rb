@@ -4,6 +4,7 @@ module Connect4Game
   # end of game logic
   class C4GameOver
     include Connect4Game::Constants
+    include Connect4Game::C4Constants
 
     attr_accessor :connect4_board, :row_matching, :col_matching,
                   :diag_matching

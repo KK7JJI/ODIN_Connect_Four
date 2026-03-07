@@ -21,9 +21,9 @@ module Connect4Game
 
     def winner?
       gameboard = connect4_board.xo_array
-      return true if row_match?(gameboard)
-      return true if column_match?(gameboard)
-      return true if diagonal_match?(gameboard)
+      return true if row_match?(gameboard, num: 4)
+      return true if column_match?(gameboard, num: 4)
+      return true if diagonal_match?(gameboard, num: 4)
 
       false
     end
@@ -32,9 +32,9 @@ module Connect4Game
       return nil unless winner?
 
       gameboard = connect4_board.xo_array
-      match_str = row_match(gameboard) if row_match?(gameboard)
-      match_str = column_match(gameboard) if column_match?(gameboard)
-      match_str = diagonal_match(gameboard) if diagonal_match?(gameboard)
+      match_str = row_match(gameboard) if row_match?(gameboard, num: 4)
+      match_str = column_match(gameboard) if column_match?(gameboard, num: 4)
+      match_str = diagonal_match(gameboard) if diagonal_match?(gameboard, num: 4)
       players.each do |player|
         return player.name if player.icon == match_str.slice(0)
       end
@@ -54,28 +54,28 @@ module Connect4Game
       false
     end
 
-    def row_match?(gameboard)
-      row_matching.match?(gameboard)
+    def row_match?(gameboard, num: 4)
+      row_matching.match?(gameboard, num: num)
     end
 
-    def row_match(gameboard)
-      row_matching.match(gameboard)
+    def row_match(gameboard, num: 4)
+      row_matching.match(gameboard, num: num)
     end
 
-    def column_match?(gameboard)
-      col_matching.match?(gameboard)
+    def column_match?(gameboard, num: 4)
+      col_matching.match?(gameboard, num: num)
     end
 
-    def column_match(gameboard)
-      col_matching.match(gameboard)
+    def column_match(gameboard, num: 4)
+      col_matching.match(gameboard, num: num)
     end
 
-    def diagonal_match?(gameboard)
-      diag_matching.match?(gameboard)
+    def diagonal_match?(gameboard, num: 4)
+      diag_matching.match?(gameboard, num: num)
     end
 
-    def diagonal_match(gameboard)
-      diag_matching.match(gameboard)
+    def diagonal_match(gameboard, num: 4)
+      diag_matching.match(gameboard, num: num)
     end
 
     def full?(gameboard)

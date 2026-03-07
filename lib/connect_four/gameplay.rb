@@ -51,23 +51,49 @@ module Connect4Game
         end
       end
 
+      game_ending(on_state_change: on_state_change,
+                  flush_display: flush_display)
+
+      return unless view_replay?
+
+      view_replay(on_state_change: on_state_change,
+                  flush_display: flush_display)
+    end
+
+    def game_ending(on_state_change: nil,
+                    flush_display: nil)
       clear(flush_display: flush_display)
       on_state_change&.call(render_gamestate)
 
       if gameover.game_over?
         game_winner if gameover.winner?
         tie_game if gameover.draw?
-        instant_replay(on_state_change: on_state_change, flush_display: flush_display)
-      else
-        save_game unless gameover.game_over?
+      else # save game was triggered.
+        save_game
       end
     end
 
-    def instant_replay(on_state_change: nil, flush_display: nil)
+    def view_replay(on_state_change: nil,
+                    flush_display: nil)
+      clear(flush_display: flush_display)
+      on_state_change&.call(render_gamestate)
       node_manager.game_nodes.each do |node|
         puts node.id
       end
       puts game_winner
+    end
+
+    def view_replay?
+      print 'View replay (Y or N): '
+      ans = $stdin.getch.upcase
+      until %w[Y N].include?(ans)
+        print "\ntry again: "
+        ans = $stdin.getch.upcase
+      end
+
+      return false if ans == 'N'
+
+      true
     end
 
     def clear(flush_display: nil)

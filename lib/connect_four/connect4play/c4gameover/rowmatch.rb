@@ -4,23 +4,21 @@ module Connect4Game
   # rules for matching 4 in a row
   # by row on the gameboard
   class RowMatch
-    def initialize
-      @match = /X{4}|O{4}/
-    end
-
-    def match?(gameboard)
+    def match?(gameboard, num: 4)
+      regex = /X{#{num}}|O{#{num}}/
       gameboard.any? do |row|
-        row.join('').match?(@match)
+        row.join('').match?(regex)
       end
     end
 
-    def match(gameboard)
-      return nil unless match?(gameboard)
+    def match(gameboard, num: 4)
+      regex = /X{#{num}}|O{#{num}}/
+      return nil unless match?(gameboard, num: num)
 
       winning_row = gameboard.select do |row|
-        row.join('').match?(@match)
+        row.join('').match?(regex)
       end
-      winning_row.join('').match(@match).to_s
+      winning_row.join('').match(regex).to_s
     end
   end
 end

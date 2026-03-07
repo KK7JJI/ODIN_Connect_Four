@@ -7,29 +7,31 @@ module Connect4Game
     attr_accessor :all_diag_coords, :gameboard
 
     def initialize
-      @match = /X{4}|O{4}/
       @all_diag_coords = nil
       @gameboard = Array.new(6) { Array.new(7) { ' ' } }
       @all_diag_coords = calc_all_diag_coords
     end
 
-    def match?(gameboard)
+    def match?(gameboard, num: 4)
       self.gameboard = gameboard
       diag_lines = map_game_tokens_to_diagonals
       diag_lines = serialize_lines(diag_lines)
+      regex = /X{#{num}}|O{#{num}}/
+
       diag_lines.each do |line|
-        return true if line.match?(@match)
+        return true if line.match?(regex)
       end
 
       false
     end
 
-    def match(gameboard)
+    def match(gameboard, num: 4)
       self.gameboard = gameboard
       diag_lines = map_game_tokens_to_diagonals
       diag_lines = serialize_lines(diag_lines)
+      regex = /X{#{num}}|O{#{num}}/
       diag_lines.each do |line|
-        return line.match(@match).to_s if line.match?(@match)
+        return line.match(regex).to_s if line.match?(regex)
       end
 
       nil

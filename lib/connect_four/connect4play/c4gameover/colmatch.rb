@@ -4,11 +4,7 @@ module Connect4Game
   # rules for matching 4 in a row
   # by row on the gameboard
   class ColMatch
-    def initialize
-      @match = /X{4}|O{4}/
-    end
-
-    def match?(gameboard)
+    def match?(gameboard, num: 4)
       # transpose board
       # transpose is basically (x,y) -> (y,x)
       # gameboard_t = gameboard[0].length.times.map do |i|
@@ -18,12 +14,13 @@ module Connect4Game
       gameboard_t = gameboard[0].length.times.map do |i|
         gameboard.map { |row| row[i] }
       end
-      row_match?(gameboard_t)
+      row_match?(gameboard_t, num: num)
     end
 
-    def row_match?(gameboard)
+    def row_match?(gameboard, num: 4)
+      regex = /X{#{num}}|O{#{num}}/
       gameboard.any? do |row|
-        row.join('').match?(@match)
+        row.join('').match?(regex)
       end
     end
 
@@ -34,13 +31,14 @@ module Connect4Game
       row_match(gameboard_t)
     end
 
-    def row_match(gameboard)
-      return nil unless row_match?(gameboard)
+    def row_match(gameboard, num: 4)
+      regex = /X{#{num}}|O{#{num}}/
+      return nil unless row_match?(gameboard, num: num)
 
       winning_row = gameboard.select do |row|
-        row.join('').match?(@match)
+        row.join('').match?(regex)
       end
-      winning_row.join('').match(@match).to_s
+      winning_row.join('').match(regex).to_s
     end
   end
 end

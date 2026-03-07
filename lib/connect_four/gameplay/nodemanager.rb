@@ -5,19 +5,21 @@ module Connect4Game
   class NodeManager
     include Connect4Game::SaveGame
 
-    attr_accessor :last_node
+    attr_accessor :last_node, :node_count
     attr_reader :all_nodes, :all_tokens
 
     def initialize(last_node: nil)
+      @node_count = 0
       @last_node = last_node
       @all_nodes = []
       @all_tokens = []
     end
 
     def add_node(token:)
-      node = Node.new(parent: nil, token: token)
+      node = Node.new(parent: nil, token: token, id: node_count)
       node.parent = last_node
       self.last_node = node
+      self.node_count += 1
       node
     end
 

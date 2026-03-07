@@ -45,6 +45,18 @@ module Connect4Game
       end
     end
 
+    def instant_replay(on_state_change: nil, flush_display: nil)
+      connect4_board.clear_board
+      node_manager.played_tokens.each do |token|
+        sleep 0.5
+        connect4_board.update_board(token)
+        clear(flush_display: flush_display)
+        on_state_change&.call(render_gamestate)
+        puts 'Replay'
+      end
+      puts game_winner
+    end
+
     def render_gamestate
       renderer.return_board_with_borders
     end

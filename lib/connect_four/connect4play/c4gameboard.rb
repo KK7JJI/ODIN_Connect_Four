@@ -14,6 +14,10 @@ module Connect4Game
       @board = Array.new(GAME_COLUMNS) { [] }
     end
 
+    def clear_board
+      @board = Array.new(GAME_COLUMNS) { [] }
+    end
+
     def open_columns
       row_lens = board.map(&:length)
       (0...row_lens.length).to_a.select do |i|
@@ -24,7 +28,7 @@ module Connect4Game
     def xo_array
       # player 1: X, player 2: O
       transpose(board.map do |row|
-        row.map { |token| token.icon }
+        row.map(&:icon)
       end)
     end
 

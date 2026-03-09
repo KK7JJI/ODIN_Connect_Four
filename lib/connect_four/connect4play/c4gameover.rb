@@ -21,9 +21,9 @@ module Connect4Game
 
     def winner?
       gameboard = connect4_board.xo_array
-      return true if row_match?(gameboard, num: 4)
-      return true if column_match?(gameboard, num: 4)
-      return true if diagonal_match?(gameboard, num: 4)
+      return true if row_match?(gameboard: gameboard, num: 4)
+      return true if column_match?(gameboard: gameboard, num: 4)
+      return true if diagonal_match?(gameboard: gameboard, num: 4)
 
       false
     end
@@ -32,15 +32,15 @@ module Connect4Game
       return nil unless winner?
 
       gameboard = connect4_board.xo_array
-      match_str = row_match(gameboard) if row_match?(gameboard, num: 4)
-      match_str = column_match(gameboard) if column_match?(gameboard, num: 4)
-      match_str = diagonal_match(gameboard) if diagonal_match?(gameboard, num: 4)
+      match_str = row_match(gameboard: gameboard) if row_match?(gameboard: gameboard, num: 4)
+      match_str = column_match(gameboard: gameboard) if column_match?(gameboard: gameboard, num: 4)
+      match_str = diagonal_match(gameboard: gameboard) if diagonal_match?(gameboard: gameboard, num: 4)
       players.each do |player|
         return player.name if player.icon == match_str.slice(0)
       end
     end
 
-    def game_over?
+    def game_over?(*)
       return true if draw?
       return true if winner?
 
@@ -48,42 +48,45 @@ module Connect4Game
     end
 
     def draw?
-      gameboard = connect4_board.xo_array
-      return true if full?(gameboard)
+      return true if connect4_board.full?
 
       false
     end
 
-    def row_match?(gameboard, num: 4)
-      row_matching.match?(gameboard, num: num)
+    def row_match?(gameboard: nil, num: 4)
+      row_matching.match?(gameboard: gameboard, num: num)
     end
 
-    def row_match(gameboard, num: 4)
-      row_matching.match(gameboard, num: num)
+    def row_match(gameboard: nil, num: 4)
+      row_matching.match(gameboard: gameboard, num: num)
     end
 
-    def column_match?(gameboard, num: 4)
-      col_matching.match?(gameboard, num: num)
+    def column_match?(gameboard: nil, num: 4)
+      col_matching.match?(gameboard: gameboard, num: num)
     end
 
-    def column_match(gameboard, num: 4)
-      col_matching.match(gameboard, num: num)
+    def column_match(gameboard: nil, num: 4)
+      col_matching.match(gameboard: gameboard, num: num)
     end
 
-    def diagonal_match?(gameboard, num: 4)
-      diag_matching.match?(gameboard, num: num)
+    def diagonal_match?(gameboard: nil, num: 4)
+      diag_matching.match?(gameboard: gameboard, num: num)
     end
 
-    def diagonal_match(gameboard, num: 4)
-      diag_matching.match(gameboard, num: num)
+    def diagonal_match(gameboard: nil, num: 4)
+      diag_matching.match(gameboard: gameboard, num: num)
     end
 
-    def full?(gameboard)
-      gameboard.flatten.none? { |elem| elem == ' ' }
+    def row_match_count(gameboard: nil, num: 4)
+      row_matching.match_count(gameboard: gameboard, num: num)
     end
 
-    def empty?(gameboard)
-      gameboard.flatten.all? { |elem| elem == ' ' }
+    def col_match_count(gameboard: nil, num: 4)
+      col_matching.match_count(gameboard: gameboard, num: num)
+    end
+
+    def diag_match_count(gameboard: nil, num: 4)
+      diag_matching.match_count(gameboard: gameboard, num: num)
     end
   end
 end

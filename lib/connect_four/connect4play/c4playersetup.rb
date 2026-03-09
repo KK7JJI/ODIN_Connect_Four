@@ -3,7 +3,13 @@
 module Connect4Game
   # setup connect 4 game players
   class C4PlayerSetup < PlayerSetup
-    attr_accessor :players
+    attr_accessor :players, :connect4_board, :gameover
+
+    def initialize(gameover: nil, board: nil)
+      super()
+      @gameover = gameover
+      @connect4_board = board
+    end
 
     def run_player_setup
       players = []
@@ -14,8 +20,15 @@ module Connect4Game
         player_type_option = config_player_type(player_name: player_name)
 
         players << Human.new(name: name, icon: icon, id: id) if player_type_option == 1
-        players << Random.new(name: name, icon: icon, id: id) if player_type_option == 2
-        players << G1.new(name: name, icon: icon, id: id) if player_type_option == 3
+
+        next unless player_type_option == 2
+
+        # players << Random.new(name: name, icon: icon, id: id)
+        players << G1.new(name: name,
+                          icon: icon,
+                          id: id,
+                          board: connect4_board,
+                          gameover: gameover)
       end
 
       players

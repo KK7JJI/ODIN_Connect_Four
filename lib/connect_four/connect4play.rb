@@ -23,6 +23,12 @@ module Connect4Game
                                        board: connect4_board)
     end
 
+    def setup_new_game
+      playersetup = C4PlayerSetup.new(gameover: gameover,
+                                      board: connect4_board)
+      self.players = playersetup.run_player_setup
+    end
+
     def game_winner
       puts "#{gameover.winner(players: players)} wins!"
     end

@@ -11,6 +11,7 @@ require_relative 'connect_four/app'
 require_relative 'connect_four/player'
 require_relative 'connect_four/player/human'
 require_relative 'connect_four/player/random'
+require_relative 'connect_four/player/g1'
 require_relative 'connect_four/player/userinput'
 require_relative 'connect_four/gameplay'
 require_relative 'connect_four/gameplay/playersetup'
@@ -33,6 +34,7 @@ require_relative 'connect_four/connect4play/c4gameover/diagmatch'
 require_relative 'connect_four/connect4play/c4nextstates'
 require_relative 'connect_four/connect4play/c4gameboard'
 require_relative 'connect_four/connect4play/c4placetokens'
+require_relative 'connect_four/connect4play/c4playersetup'
 
 # Entry point.  run.sh starts execution
 # of the program here.

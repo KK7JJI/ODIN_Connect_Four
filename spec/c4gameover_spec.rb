@@ -12,33 +12,6 @@ describe Connect4Game::C4GameOver do
     go.connect4_board = gb
   end
 
-  context 'empty/full board' do
-    let(:xo_array) { Array.new(6) { Array.new(7) { ' ' } } }
-    before do
-      go.connect4_board = Connect4Game::C4GameBoard.new
-    end
-    it '#empty?' do
-      expect(go.full?(xo_array)).to eql(false)
-      expect(go.empty?(xo_array)).to eql(true)
-    end
-  end
-
-  context 'board full of Xs' do
-    let(:xo_array) { Array.new(6) { Array.new(7) { 'X' } } }
-    it '#full?' do
-      expect(go.full?(xo_array)).to eql(true)
-      expect(go.empty?(xo_array)).to eql(false)
-    end
-  end
-
-  context 'board full of Os' do
-    let(:xo_array) { Array.new(6) { Array.new(7) { 'O' } } }
-    it '#full?' do
-      expect(go.full?(xo_array)).to eql(true)
-      expect(go.empty?(xo_array)).to eql(false)
-    end
-  end
-
   describe 'winner' do
     let(:gb) { instance_double(Connect4Game::C4GameBoard) }
     before do

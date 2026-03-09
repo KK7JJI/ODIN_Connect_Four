@@ -12,29 +12,43 @@ module Connect4Game
       @all_diag_coords = calc_all_diag_coords
     end
 
-    def match?(gameboard, num: 4)
+    def match?(gameboard: nil, num: 4)
       self.gameboard = gameboard
-      diag_lines = map_game_tokens_to_diagonals
-      diag_lines = serialize_lines(diag_lines)
+      diag_lines_xorepr = map_game_tokens_to_diagonals
+      diag_lines_xorepr = serialize_lines(diag_lines_xorepr)
       regex = /X{#{num}}|O{#{num}}/
 
-      diag_lines.each do |line|
-        return true if line.match?(regex)
+      diag_lines_xorepr.each do |xo_line|
+        return true if xo_line.match?(regex)
       end
 
       false
     end
 
-    def match(gameboard, num: 4)
+    def diag_lines(gameboard: nil)
       self.gameboard = gameboard
       diag_lines = map_game_tokens_to_diagonals
-      diag_lines = serialize_lines(diag_lines)
+      serialize_lines(diag_lines)
+    end
+
+    def match(gameboard: nil, num: 4)
       regex = /X{#{num}}|O{#{num}}/
-      diag_lines.each do |line|
+      diag_lines(gameboard: gameboard).each do |line|
         return line.match(regex).to_s if line.match?(regex)
       end
 
       nil
+    end
+
+    def match_count(gameboard: nil, num: 4)
+      self.gameboard = gameboard
+      regex = /X{#{num}}|O{#{num}}/
+      count = 0
+      diag_lines(gameboard: gameboard).each do |line|
+        count += line.scan(regex).length
+      end
+
+      count
     end
 
     def map_game_tokens_to_diagonals

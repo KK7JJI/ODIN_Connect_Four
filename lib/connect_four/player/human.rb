@@ -5,6 +5,7 @@ module Connect4Game
   class Human < Player
     include Connect4Game::Constants
     include Connect4Game::C4Constants
+    include Connect4Game::SaveGame
 
     attr_reader :columns
 
@@ -36,6 +37,11 @@ module Connect4Game
         throw :savegame if val == 's'
       end
       val.to_i
+    end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
     end
   end
 end

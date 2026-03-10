@@ -32,7 +32,7 @@ module Connect4Game
       if players.empty?
         setup_new_game
       else
-        reinitialize
+        restore_state
       end
 
       catch(:savegame) do
@@ -127,10 +127,9 @@ module Connect4Game
       self.players = PlayerSetup.new.run_player_setup
     end
 
-    def reinitialize
-      puts __method__
+    def restore_state
       initialize(reloader: true)
-      players.each(&:reinitialize)
+      players.each(&:restore_state)
     end
 
     def render_gamestate

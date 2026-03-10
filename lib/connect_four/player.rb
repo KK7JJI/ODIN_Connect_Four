@@ -19,8 +19,9 @@ module Connect4Game
       @id = id
     end
 
-    def reinitialize(input: UserInput.new)
-      @input = input
+    def restore_state(**kwargs)
+      @input = UserInput.new unless kwargs[:input]
+      @input = kwargs[:input] if kwargs[:input]
     end
 
     def valid_selection?(val)

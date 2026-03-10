@@ -21,6 +21,7 @@ module Connect4Game
   class G1 < Player
     include Connect4Game::Constants
     include Connect4Game::C4Constants
+    include Connect4Game::SaveGame
     # will need access to the board ?? or a copy of it.
 
     attr_accessor :center_column, :game_columns, :gameover, :connect4_board,
@@ -34,8 +35,12 @@ module Connect4Game
       @center_column = CENTER_COLUMN
       @game_columns = GAME_COLUMNS
 
-      go = @gameover
-      @config_testing = {
+      @config_testing = scoring_rules
+    end
+
+    def scoring_rules
+      go = gameover
+      self.config_testing = {
         win: lambda do |gameboard|
           return 1 if go.game_over?(gameboard: gameboard)
 
@@ -59,6 +64,13 @@ module Connect4Game
         bcr2: ->(gameboard:) { go.col_match_count(gameboard: gameboard, num: 2) },
         brr2: ->(gameboard:) { go.row_match_count(gameboard: gameboard, num: 2) }
       }
+    end
+
+    def restore_state(**kwargs)
+      @input = kwargs[:input]
+      @gameover = kwargs[:gameover]
+      @connect4_board = kwargs[:board]
+      @config_testing = scoring_rules
     end
 
     def place_token(token)
@@ -117,12 +129,12 @@ module Connect4Game
       use_icon = opponent_icon if SCORE_POSITIONS[config][1] == :opponent_icon
 
       gameboard = connect4_board.xo_array
+
       before_loc_count = config_testing[config].call(gameboard: gameboard)
       token_test_pos(nextstate: nextstate, use_icon: use_icon)
       gameboard = connect4_board.xo_array
       after_loc_count = config_testing[config].call(gameboard: gameboard)
       undo_test_pos(nextstate: nextstate)
-      puts "#{after_loc_count} < #{before_loc_count}, #{config.inspect}"
 
       # return a number, the config_score for nextstate and config
       return 0 unless after_loc_count > before_loc_count
@@ -143,6 +155,11 @@ module Connect4Game
 
     def undo_test_pos(nextstate: nil)
       connect4_board.board[nextstate.col].pop
+    end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
     end
   end
 end

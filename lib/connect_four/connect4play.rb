@@ -29,16 +29,21 @@ module Connect4Game
       self.players = playersetup.run_player_setup
     end
 
+    def restore_state
+      initialize(reloader: true)
+      players.each do |player|
+        player.restore_state(gameover: gameover,
+                             board: connect4_board,
+                             input: nil)
+      end
+    end
+
     def game_winner
       puts "#{gameover.winner(players: players)} wins!"
     end
 
     def tie_game
       puts 'Tie game.'
-    end
-
-    def reloader
-      initialize(reloader: true)
     end
 
     def add_new_player_tokens(player:)

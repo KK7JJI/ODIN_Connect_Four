@@ -93,7 +93,7 @@ module Connect4Game
     def calc_config_score(player_icon: nil,
                           nextstate: nil,
                           config: nil)
-      use_icon = icon_selection(player_icon: player_icon)
+      use_icon = icon_selection(player_icon: player_icon, config: config)
 
       before = config_scoring[config].call(gameboard: connect4_board.xo_array)
       token_test_pos(nextstate: nextstate, use_icon: use_icon)
@@ -107,7 +107,7 @@ module Connect4Game
       C4Constants::SCORE_POSITIONS[config][0]
     end
 
-    def icon_selection(player_icon: nil)
+    def icon_selection(player_icon: nil, config: nil)
       opponent_icon = (player_icon == 'X' ? 'O' : 'X')
       SCORE_POSITIONS[config][1] == :opponent_icon ? opponent_icon : player_icon
     end

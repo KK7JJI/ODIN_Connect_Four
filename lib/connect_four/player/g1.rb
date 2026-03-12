@@ -38,6 +38,13 @@ module Connect4Game
       token
     end
 
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
+    end
+
+    private
+
     def select_position(scores: nil)
       max_total_score = scores.values.map do |scores|
         scores[:total_score]
@@ -49,11 +56,6 @@ module Connect4Game
       end
 
       arr.sample[0] # return a single nextstate.
-    end
-
-    def self.json_create(hash)
-      obj = allocate
-      obj.json_create(allocate, hash)
     end
   end
 end

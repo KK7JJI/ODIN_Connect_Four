@@ -32,6 +32,22 @@ module Connect4Game
       @config_scoring = config_scoring_setup
     end
 
+    def calculate_scores(player_icon: nil, nextstates: nil)
+      scores = {}
+
+      nextstates.each do |nextstate|
+        config_score = score_configs(player_icon: player_icon,
+                                     nextstate: nextstate)
+        pos_score = calc_pos_score(nextstate: nextstate)
+        scores[nextstate] = { total_score: config_score + pos_score,
+                              config_score: config_score,
+                              pos_score: pos_score }
+      end
+      scores
+    end
+
+    private
+
     def config_scoring_setup
       go = gameover
 
@@ -55,20 +71,6 @@ module Connect4Game
         bdr2: count.call(:row_match_count, 2),
         bcr2: count.call(:diag_match_count, 2),
         brr2: count.call(:row_match_count, 2) }
-    end
-
-    def calculate_scores(player_icon: nil, nextstates: nil)
-      scores = {}
-
-      nextstates.each do |nextstate|
-        config_score = score_configs(player_icon: player_icon,
-                                     nextstate: nextstate)
-        pos_score = calc_pos_score(nextstate: nextstate)
-        scores[nextstate] = { total_score: config_score + pos_score,
-                              config_score: config_score,
-                              pos_score: pos_score }
-      end
-      scores
     end
 
     def score_configs(player_icon: nil, nextstate: nil)

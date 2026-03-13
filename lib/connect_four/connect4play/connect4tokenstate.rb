@@ -3,6 +3,8 @@
 module Connect4Game
   # player token locations
   class Connect4TokenState < TokenState
+    include Connect4Game::SaveGame
+
     attr_accessor :id
     attr_reader :row, :col
 
@@ -22,6 +24,11 @@ module Connect4Game
     def col=(value)
       @col = value
       @id = [@row, value].inspect
+    end
+
+    def self.json_create(hash)
+      obj = allocate
+      obj.json_create(allocate, hash)
     end
   end
 end

@@ -6,11 +6,10 @@ module Connect4Game
     include Connect4Game::SaveGame
 
     attr_accessor :node_count
-    attr_reader :all_nodes, :all_tokens
+    attr_reader :all_nodes
 
     def initialize
       @all_nodes = []
-      @all_tokens = []
     end
 
     def add_node(token:)

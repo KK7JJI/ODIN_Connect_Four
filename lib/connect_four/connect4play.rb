@@ -59,6 +59,7 @@ module Connect4Game
     end
 
     def view_replay(on_state_change: nil, flush_display: nil)
+      puts node_manager.all_nodes.inspect
       connect4_board.clear_board
       node_manager.played_tokens.each do |token|
         sleep 0.5

@@ -17,7 +17,7 @@ module Connect4Game
       @my_turn = nil unless reloader
       @players = players || [] unless reloader
       @node_manager = NodeManager.new unless reloader
-      @renderer = SimplerAsciiRenderer.new
+      @renderer = SimpleAsciiRenderer.new
       @gameover = GameOver.new
       @nextstates = NextStates.new
       @placetokens = PlaceTokens.new(node_manager: node_manager,
@@ -133,7 +133,7 @@ module Connect4Game
     end
 
     def render_gamestate
-      @renderer.render(node_manager.last_node)
+      @renderer.render(node_manager.game_nodes)
     end
 
     def save_game

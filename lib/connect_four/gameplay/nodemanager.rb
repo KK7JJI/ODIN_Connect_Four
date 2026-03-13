@@ -5,43 +5,35 @@ module Connect4Game
   class NodeManager
     include Connect4Game::SaveGame
 
-    attr_accessor :last_node, :node_count
+    attr_accessor :node_count
     attr_reader :all_nodes, :all_tokens
 
-    def initialize(last_node: nil)
-      @node_count = 0
-      @last_node = last_node
+    def initialize
       @all_nodes = []
       @all_tokens = []
     end
 
     def add_node(token:)
-      node = Node.new(parent: nil, token: token, id: node_count)
-      node.parent = last_node
-      self.last_node = node
-      self.node_count += 1
+      node = Node.new(token: token, id: node_count)
+      all_nodes << node
       node
     end
 
-    def game_nodes(node: last_node)
-      @all_nodes = traverse_nodes(node)
+    def last_node
+      all_nodes[-1]
     end
 
-    def played_tokens(node: last_node)
-      traverse_nodes(node).map(&:token)
+    def game_nodes
+      all_nodes
+    end
+
+    def played_tokens
+      all_nodes.map(&:token)
     end
 
     def self.json_create(hash)
       obj = allocate
       obj.json_create(allocate, hash)
-    end
-
-    private
-
-    def traverse_nodes(node)
-      return [node] if node.parent.nil?
-
-      traverse_nodes(node.parent) + node
     end
   end
 end

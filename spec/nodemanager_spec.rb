@@ -32,9 +32,7 @@ describe Connect4Game::NodeManager do
         nm.add_node(token: token)
       end
       # expect(nm.all_nodes.map(&:token)).to eql(tokens)
-      nm.game_nodes
-      tokens.reverse
-      expect(nm.all_nodes.map(&:token)).to eql(tokens)
+      expect(nm.game_nodes.map(&:token)).to eql(tokens)
     end
   end
 

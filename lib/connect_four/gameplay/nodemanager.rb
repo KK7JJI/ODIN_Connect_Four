@@ -41,8 +41,7 @@ module Connect4Game
     def traverse_nodes(node)
       return [node] if node.parent.nil?
 
-      nodes = traverse_nodes(node.parent)
-      nodes << node
+      traverse_nodes(node.parent) + node
     end
   end
 end
